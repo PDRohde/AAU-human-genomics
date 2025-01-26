@@ -15,8 +15,18 @@ knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_knit$set(root.dir = "/Users/fs61oo/Documents/GitHub/AAU-human-genomics/")
 ```
 
-## Exercise 1
-Explain the central dogma using the fibure below and fill out the empty boxes.
+### Exercise 1 (central dogma)
+Using the figure below, explain the central dogma of molecular biology and complete the empty boxes.
 
-![Exercise 1](./grx/exercises-01_e1.png)
+<img src="./grx/exercises-01_e1.png" style="width:75%; height:auto;">
 
+### Exercise 2 (genetic terminology)
+Below you see two homologous chromosomes.
+
+
+<img src="./grx/exercises-01_e2.png"  style="width:75%; height:auto;">
+
+1.	What is the definition of a locus?
+	2.	How many loci are depicted in the figure?
+	3.	What are the genotypes at each locus?
+	4.	What is a haplotype, and what haplotypes can be identified from the figure?
