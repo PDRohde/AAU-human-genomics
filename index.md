@@ -1,9 +1,9 @@
 ---
-title: "Make a Website with onl"
+title: "Course material for the master course in Human Genomics"
 permalink: /
 layout: default
 ---
 
-# Website for ...
-Download and set up the gact database, which is focused on genomic associations for complex traits:   
-[Download and install gact database](exercises/01-exercises.html)  
+# Exercises
+Session 1: Introduction to genetic variation and personalised medicine:   
+[Exercises 1](exercises/01-exercises.html)  
