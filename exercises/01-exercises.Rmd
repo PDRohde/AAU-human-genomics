@@ -18,15 +18,18 @@ knitr::opts_knit$set(root.dir = "/Users/fs61oo/Documents/GitHub/AAU-human-genomi
 ### Exercise 1 (central dogma)
 Using the figure below, explain the central dogma of molecular biology and complete the empty boxes.
 
+<p align="center">
 <img src="./grx/exercises-01_e1.png" style="width:75%; height:auto;">
+</p>
 
 ### Exercise 2 (genetic terminology)
-Below you see two homologous chromosomes.
+Below you see two homologous chromosomes (in the metaphase).
 
-
-<img src="./grx/exercises-01_e2.png"  style="width:75%; height:auto;">
+<p align="center">
+<img src="./grx/exercises-01_e2.png"  style="width:25%; height:auto;">
+</p>
 
 1.	What is the definition of a locus?
-	2.	How many loci are depicted in the figure?
-	3.	What are the genotypes at each locus?
-	4.	What is a haplotype, and what haplotypes can be identified from the figure?
+2.	How many loci are depicted in the figure?
+3.	What are the genotypes at each locus when the possible alleles in the gene pool are <tt>{A, a, B}</tt>?
+4.	What is a haplotype, and what haplotypes can be identified from the figure?
