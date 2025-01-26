@@ -17,7 +17,8 @@ Below is a brief overview of the module’s content:
 
 By the end of this module, you will have a comprehensive understanding of human genomics and its transformative role in biology and medicine. This course is designed to equip you with both theoretical knowledge and practical skills, preparing you for further research or careers in genomics-related fields.
 
-The course responsible is Palle Duun Rohde ([palledr@hst.aau.dk](palledr@hst.aau.dk))
+The course responsible is Palle Duun Rohde ([Email](mailto:palledr@hst.aau.dk?subject=Subject&body=Text) )
+
 
 ## Sessions
 **Session 1 Introduction to genetic variation and personalised medicine** \
