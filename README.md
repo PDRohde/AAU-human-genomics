@@ -12,7 +12,7 @@ Welcome to the new module, Human Genomics. This module aims to provide you with 
 Below is a brief overview of the module’s content:
 
 <p align="center">
-<img src="./module_plan_2025-extended.png"  style="width:75%; height:auto;">
+<img src="./module_plan_2025-extended.png"  style="width:85%; height:auto;">
 </p>
 
 By the end of this module, you will have a comprehensive understanding of human genomics and its transformative role in biology and medicine. This course is designed to equip you with both theoretical knowledge and practical skills, preparing you for further research or careers in genomics-related fields.

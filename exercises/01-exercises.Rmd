@@ -1,6 +1,6 @@
 ---
 title: "Human Genomics"
-subtitle: "EXERCISE 1: Introduction to genetic variation and personalised medicine"
+subtitle: "Session 1: Introduction to genetic variation and personalised medicine"
 author:
   - name: "Palle Duun Rohde"
     url: https://pdrohde.github.io/
