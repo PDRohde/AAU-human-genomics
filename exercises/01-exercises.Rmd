@@ -1,0 +1,22 @@
+---
+title: "Human Genomics"
+subtitle: "EXERCISE 1: Introduction to genetic variation and personalised medicine"
+author:
+  - name: "Palle Duun Rohde"
+    url: https://pdrohde.github.io/
+    affiliation: Genomic Medicine, Aalborg University
+    email: palledr@hst.aau.dk
+date: "2025-01-26"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = "/Users/fs61oo/Documents/GitHub/AAU-human-genomics/")
+```
+
+## Exercise 1
+Explain the central dogma using the fibure below and fill out the empty boxes.
+
+![Exercise 1](./grx/exercises-01_e1.png)
+
