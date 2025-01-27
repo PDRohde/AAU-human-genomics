@@ -18,7 +18,7 @@ library(kableExtra)
 
 This section provides a brief introduction to fundamental <tt>R</tt> operations. Follow each step carefully, and ensure you understand what each command does and why it works as expected.
 
-#### Calculations
+#### A calculator
 You can use <tt>R</tt> as a powerful calculator to perform standard arithmetic operations using the following mathematical operators:
 ```{r}
 1 + 3   # Addition
@@ -155,7 +155,7 @@ x*2
 ```
 <br />
 	
-#### Introduction to Object Classes
+#### Introduction to object classes
 
 In <tt>R</tt>, data is stored in objects, and each object belongs to a specific class, which determines how the data is structured and what operations can be performed on it. Understanding object classes is crucial for efficient data manipulation and analysis in R. The different object types in <tt>R</tt> have unique ways to access their elements. Understanding these indexing methods allows efficient data retrieval and modification. 
 <br />
@@ -311,9 +311,188 @@ a[ , , 2]
 
 <br />
 
-#### Introduction to Mathematical Operations on Matrices 
+#### Introduction to mathematical operations on matrices 
 
-Just like vectors, matrices in R allow for straightforward mathematical operations. Since matrices are essentially two-dimensional arrays of numbers, you can perform various element-wise and matrix-specific operations easily.
+Just like vectors, matrices in R allow for straightforward mathematical operations. Since matrices are essentially two-dimensional arrays of numbers, you can perform various element-wise and matrix-specific operations easily. Let’s first create a matrix using the `matrix()` function.
+```{r}
+# Create a 3x3 matrix with numbers 1 to 9
+m <- matrix(1:9, nrow = 3, ncol = 3)
+
+# Print the matrix
+print(m)
+```
+
+Operations like addition, subtraction, multiplication, and division can be applied **element-wise** in matrices, just as in vectors.
+```{r, eval=F}
+# Element-wise addition
+m + 2  
+
+# Element-wise subtraction
+m - 3  
+
+# Element-wise multiplication
+m * 2  
+```
+```{r}
+# Element-wise division
+m / 2  
+```
+
+If you have a vector, <tt>R</tt> automatically applies operations to each row or column of the matrix.
+```{r}
+v <- c(1, 2, 3)
+
+# Add vector to each column 
+m + v  
+
+# Multiply vector with each row
+m * v
+```
+
+You can perform addition and subtraction on matrices of the same dimensions.
+```{r}
+A <- matrix(1:4, nrow = 2)
+B <- matrix(5:8, nrow = 2)
+
+# Matrix addition
+A + B  
+```
+
+Linear algebra can be extremely useful for improving the speed on a function. One common operation is matrix multiplication, which is done using the `%*%` operator, not the `*` operator, which performs element-wise multiplication.
+```{r}
+A <- matrix(1:4,ncol=2,nrow=2,byrow=T)
+print(A)
+
+A*A
+```
+
+The true matrix multiplication is defined as:
+\begin{equation}
+\begin{bmatrix}
+  A_{1,1} & A_{1,2}  \\
+  A_{2,1} & A_{2,2}  \\
+\end{bmatrix}
+\times
+\begin{bmatrix}
+  A_{1,1} & A_{1,2}  \\
+  A_{2,1} & A_{2,2}  \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+  \sum_{j=1}^2 (A_{1,j}\times A_{j,1} ) & \sum_{j=1}^2 (A_{1,j}\times A_{j,2} )  \\
+  \sum_{j=1}^2 (A_{2,j}\times A_{j,1} ) & \sum_{j=1}^2 (A_{2,j}\times A_{j,2} )  \\
+\end{bmatrix}
+\end{equation}
+
+Thus, for the small example that would be:
+\begin{equation}
+\begin{bmatrix}
+  1 & 3  \\
+  2 & 4  \\
+\end{bmatrix}
+\times
+\begin{bmatrix}
+  1 & 3  \\
+  2 & 4  \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+  (1 \times 1)+(2 \times 3) & (1 \times 2)+(2 \times 4)  \\
+  (3 \times 1)+(4 \times 3) & (3 \times 2)+(4 \times 4) \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+  7 & 10  \\
+  15 & 22 \\
+\end{bmatrix}
+\end{equation}
+```{r}
+A%*%A
+```
+
+The transpose of a matrix (switching rows and columns) is done using the `t()` function.
+```{r}
+t(A)
+```
+
+You can compute the determinant (thus, if `det(A) !=0` the matrix is invertible) and inverse of a square matrix using the `det()` and `solve()` functions, respectively.
+```{r}
+# Determinant of matrix A
+det(A)  
+
+# Inverse of matrix A
+solve(A)  
+```
+
+You can compute row-wise and column-wise summaries easily using functions like `rowSums()` and `colSums()`.
+```{r}
+# Sum of each row
+rowSums(m)
+
+# Sum of each column
+colSums(m)
+```
+Other functions like `rowMeans()` and `colMeans()` calculate averages.
+
+You can apply custom functions to rows or columns using the `apply()` function,
+```{r}
+# Calculate maximum value in each row
+apply(m, 1, max)
+
+# Calculate sum of each column
+apply(m, 2, sum)
+```
+where the second argument specifies the direction (`1` for rows, `2` for columns).
+
+<br />
+
+#### Using and writing functions
+
+There exists many pre-defined functions within R, but you can also create your own. For example, you can calculate the mean (average) and standard deviation (SD) of a set of numbers using both built-in functions and custom user-defined functions. 
+
+Suppose that we have measured the height for $n=5$ individuals:
+```{r}
+y <- c(173, 184, 168, 177,187) # vector of observations
+n <- length(y)                 # store how many observations we have
+```
+
+The **mean** ($\bar{x}$) height  is the sum of the values divided by the number of observations, 
+$$\bar{x} = \frac{1}{n} \sum_{i=1}^n \textrm{y}_i = \frac{173 + 184 + 168 + 177 + 187}{5}=177.8$$
+We can use the buit-in function `mean()` to compute it:
+```{r}
+# Calculate mean
+mean_value <- mean(y)
+print(mean_value)
+```
+
+We can define our own function for calculating the mean of height:
+```{r}
+calculate_mean <- function(x) {
+  sum(x) / length(x)
+}
+
+# Test the function
+calculate_mean(y)
+```
+
+To have an idea how much the values of height *vary* around the mean we can use **standard deviation**, that is, the square root of **variance**. The __Vvariance__ is the average squared deviation from the mean. When variance is computed from a sample of size $n$, whose mean is first estimated from that same sample, then the denominator in variance calculation is $n-1$ rather than $n$, so
+\begin{align}
+\textrm{variance} &= \frac{1}{n-1}\sum_{i=1}^n(\textrm{y}_i-\bar{x})^2  \notag \\
+                  &= \frac{(173-177.8)^2 + (184-177.8)^2 + (168-177.8)^2 + (177-177.8)^2 + (187-177.8)^2}{4}  \notag \\
+                  &= 60.7 \notag \\
+\end{align}
+
+This can be done as:
+```{r}
+sum((y - mean(y))^2) / (n - 1)
+```
+
+or using the built-in `var()`-function.
+```{r}
+var(y)
+```
+
+
 
 
 <br />

@@ -364,8 +364,8 @@ University<br><a class="author_email" href="mailto:#"><a href="mailto:palledr@hs
 <p>This section provides a brief introduction to fundamental <tt>R</tt>
 operations. Follow each step carefully, and ensure you understand what
 each command does and why it works as expected.</p>
-<div id="calculations" class="section level4">
-<h4>Calculations</h4>
+<div id="a-calculator" class="section level4">
+<h4>A calculator</h4>
 <p>You can use <tt>R</tt> as a powerful calculator to perform standard
 arithmetic operations using the following mathematical operators:</p>
 <pre class="r"><code>1 + 3   # Addition</code></pre>
@@ -523,7 +523,7 @@ x*2</code></pre>
 <p><br /></p>
 </div>
 <div id="introduction-to-object-classes" class="section level4">
-<h4>Introduction to Object Classes</h4>
+<h4>Introduction to object classes</h4>
 <p>In <tt>R</tt>, data is stored in objects, and each object belongs to
 a specific class, which determines how the data is structured and what
 operations can be performed on it. Understanding object classes is
@@ -685,11 +685,204 @@ a[ , , 2]</code></pre>
 </div>
 </div>
 <div id="introduction-to-mathematical-operations-on-matrices" class="section level4">
-<h4>Introduction to Mathematical Operations on Matrices</h4>
+<h4>Introduction to mathematical operations on matrices</h4>
 <p>Just like vectors, matrices in R allow for straightforward
 mathematical operations. Since matrices are essentially two-dimensional
 arrays of numbers, you can perform various element-wise and
-matrix-specific operations easily.</p>
+matrix-specific operations easily. Let’s first create a matrix using the
+<code>matrix()</code> function.</p>
+<pre class="r"><code># Create a 3x3 matrix with numbers 1 to 9
+m &lt;- matrix(1:9, nrow = 3, ncol = 3)
+
+# Print the matrix
+print(m)</code></pre>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]    1    4    7
+## [2,]    2    5    8
+## [3,]    3    6    9</code></pre>
+<p>Operations like addition, subtraction, multiplication, and division
+can be applied <strong>element-wise</strong> in matrices, just as in
+vectors.</p>
+<pre class="r"><code># Element-wise addition
+m + 2  
+
+# Element-wise subtraction
+m - 3  
+
+# Element-wise multiplication
+m * 2  </code></pre>
+<pre class="r"><code># Element-wise division
+m / 2  </code></pre>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]  0.5  2.0  3.5
+## [2,]  1.0  2.5  4.0
+## [3,]  1.5  3.0  4.5</code></pre>
+<p>If you have a vector, <tt>R</tt> automatically applies operations to
+each row or column of the matrix.</p>
+<pre class="r"><code>v &lt;- c(1, 2, 3)
+
+# Add vector to each column 
+m + v  </code></pre>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]    2    5    8
+## [2,]    4    7   10
+## [3,]    6    9   12</code></pre>
+<pre class="r"><code># Multiply vector with each row
+m * v</code></pre>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]    1    4    7
+## [2,]    4   10   16
+## [3,]    9   18   27</code></pre>
+<p>You can perform addition and subtraction on matrices of the same
+dimensions.</p>
+<pre class="r"><code>A &lt;- matrix(1:4, nrow = 2)
+B &lt;- matrix(5:8, nrow = 2)
+
+# Matrix addition
+A + B  </code></pre>
+<pre><code>##      [,1] [,2]
+## [1,]    6   10
+## [2,]    8   12</code></pre>
+<p>Linear algebra can be extremely useful for improving the speed on a
+function. One common operation is matrix multiplication, which is done
+using the <code>%*%</code> operator, not the <code>*</code> operator,
+which performs element-wise multiplication.</p>
+<pre class="r"><code>A &lt;- matrix(1:4,ncol=2,nrow=2,byrow=T)
+print(A)</code></pre>
+<pre><code>##      [,1] [,2]
+## [1,]    1    2
+## [2,]    3    4</code></pre>
+<pre class="r"><code>A*A</code></pre>
+<pre><code>##      [,1] [,2]
+## [1,]    1    4
+## [2,]    9   16</code></pre>
+<p>The true matrix multiplication is defined as: <span class="math display">\[\begin{equation}
+\begin{bmatrix}
+  A_{1,1} &amp; A_{1,2}  \\
+  A_{2,1} &amp; A_{2,2}  \\
+\end{bmatrix}
+\times
+\begin{bmatrix}
+  A_{1,1} &amp; A_{1,2}  \\
+  A_{2,1} &amp; A_{2,2}  \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+  \sum_{j=1}^2 (A_{1,j}\times A_{j,1} ) &amp; \sum_{j=1}^2
+(A_{1,j}\times A_{j,2} )  \\
+  \sum_{j=1}^2 (A_{2,j}\times A_{j,1} ) &amp; \sum_{j=1}^2
+(A_{2,j}\times A_{j,2} )  \\
+\end{bmatrix}
+\end{equation}\]</span></p>
+<p>Thus, for the small example that would be: <span class="math display">\[\begin{equation}
+\begin{bmatrix}
+  1 &amp; 3  \\
+  2 &amp; 4  \\
+\end{bmatrix}
+\times
+\begin{bmatrix}
+  1 &amp; 3  \\
+  2 &amp; 4  \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+  (1 \times 1)+(2 \times 3) &amp; (1 \times 2)+(2 \times 4)  \\
+  (3 \times 1)+(4 \times 3) &amp; (3 \times 2)+(4 \times 4) \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+  7 &amp; 10  \\
+  15 &amp; 22 \\
+\end{bmatrix}
+\end{equation}\]</span></p>
+<pre class="r"><code>A%*%A</code></pre>
+<pre><code>##      [,1] [,2]
+## [1,]    7   10
+## [2,]   15   22</code></pre>
+<p>The transpose of a matrix (switching rows and columns) is done using
+the <code>t()</code> function.</p>
+<pre class="r"><code>t(A)</code></pre>
+<pre><code>##      [,1] [,2]
+## [1,]    1    3
+## [2,]    2    4</code></pre>
+<p>You can compute the determinant (thus, if <code>det(A) !=0</code> the
+matrix is invertible) and inverse of a square matrix using the
+<code>det()</code> and <code>solve()</code> functions, respectively.</p>
+<pre class="r"><code># Determinant of matrix A
+det(A)  </code></pre>
+<pre><code>## [1] -2</code></pre>
+<pre class="r"><code># Inverse of matrix A
+solve(A)  </code></pre>
+<pre><code>##      [,1] [,2]
+## [1,] -2.0  1.0
+## [2,]  1.5 -0.5</code></pre>
+<p>You can compute row-wise and column-wise summaries easily using
+functions like <code>rowSums()</code> and <code>colSums()</code>.</p>
+<pre class="r"><code># Sum of each row
+rowSums(m)</code></pre>
+<pre><code>## [1] 12 15 18</code></pre>
+<pre class="r"><code># Sum of each column
+colSums(m)</code></pre>
+<pre><code>## [1]  6 15 24</code></pre>
+<p>Other functions like <code>rowMeans()</code> and
+<code>colMeans()</code> calculate averages.</p>
+<p>You can apply custom functions to rows or columns using the
+<code>apply()</code> function,</p>
+<pre class="r"><code># Calculate maximum value in each row
+apply(m, 1, max)</code></pre>
+<pre><code>## [1] 7 8 9</code></pre>
+<pre class="r"><code># Calculate sum of each column
+apply(m, 2, sum)</code></pre>
+<pre><code>## [1]  6 15 24</code></pre>
+<p>where the second argument specifies the direction (<code>1</code> for
+rows, <code>2</code> for columns).</p>
+<p><br /></p>
+</div>
+<div id="using-and-writing-functions" class="section level4">
+<h4>Using and writing functions</h4>
+<p>There exists many pre-defined functions within R, but you can also
+create your own. For example, you can calculate the mean (average) and
+standard deviation (SD) of a set of numbers using both built-in
+functions and custom user-defined functions.</p>
+<p>Suppose that we have measured the height for <span class="math inline">\(n=5\)</span> individuals:</p>
+<pre class="r"><code>y &lt;- c(173, 184, 168, 177,187) # vector of observations
+n &lt;- length(y)                 # store how many observations we have</code></pre>
+<p>The <strong>mean</strong> (<span class="math inline">\(\bar{x}\)</span>) height is the sum of the values
+divided by the number of observations, <span class="math display">\[\bar{x} = \frac{1}{n} \sum_{i=1}^n \textrm{y}_i =
+\frac{173 + 184 + 168 + 177 + 187}{5}=177.8\]</span> We can use the
+buit-in function <code>mean()</code> to compute it:</p>
+<pre class="r"><code># Calculate mean
+mean_value &lt;- mean(y)
+print(mean_value)</code></pre>
+<pre><code>## [1] 177.8</code></pre>
+<p>We can define our own function for calculating the mean of
+height:</p>
+<pre class="r"><code>calculate_mean &lt;- function(x) {
+  sum(x) / length(x)
+}
+
+# Test the function
+calculate_mean(y)</code></pre>
+<pre><code>## [1] 177.8</code></pre>
+<p>To have an idea how much the values of height <em>vary</em> around
+the mean we can use <strong>standard deviation</strong>, that is, the
+square root of <strong>variance</strong>. The <strong>Vvariance</strong>
+is the average squared deviation from the mean. When variance is
+computed from a sample of size <span class="math inline">\(n\)</span>,
+whose mean is first estimated from that same sample, then the
+denominator in variance calculation is <span class="math inline">\(n-1\)</span> rather than <span class="math inline">\(n\)</span>, so <span class="math display">\[\begin{align}
+\textrm{variance} &amp;=
+\frac{1}{n-1}\sum_{i=1}^n(\textrm{y}_i-\bar{x})^2  \notag \\
+                  &amp;= \frac{(173-177.8)^2 + (184-177.8)^2 +
+(168-177.8)^2 + (177-177.8)^2 + (187-177.8)^2}{4}  \notag \\
+                  &amp;= 60.7 \notag \\
+\end{align}\]</span></p>
+<p>This can be done as:</p>
+<pre class="r"><code>sum((y - mean(y))^2) / (n - 1)</code></pre>
+<pre><code>## [1] 60.7</code></pre>
+<p>or using the built-in <code>var()</code>-function.</p>
+<pre class="r"><code>var(y)</code></pre>
+<pre><code>## [1] 60.7</code></pre>
 <p><br /> <br /></p>
 </div>
 
