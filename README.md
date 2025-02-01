@@ -27,7 +27,39 @@ The course responsible is Palle Duun Rohde ([Email](mailto:palledr@hst.aau.dk?su
  [&nbsp; Intro to R](exercises/01-r-intro.html)  
 
 **Session 2: Population genomics** \
- [&nbsp; Lecture notes](lecture_notes/)  
- [&nbsp; Exercises](exercises/)  
+ [&nbsp; Lecture notes](lecture_notes/02-session_slides-github.pdf)  
+ [&nbsp; Exercises]()  
+
+ **Session 3: Risk estimation from pedigrees** \
+ [&nbsp; Lecture notes]()  
+ [&nbsp; Exercises]()
+
+ **Session 4: Complex traits and quantitative genetics** \
+ [&nbsp; Lecture notes]()  
+ [&nbsp; Exercises]()
+
+ **Session 5: Estimation of genetic parameters** \
+ [&nbsp; Lecture notes]()  
+ [&nbsp; Exercises]()
+
+ **Session 6: Genome-wide association studies** \
+ [&nbsp; Lecture notes]()  
+ [&nbsp; Exercises]()
+
+ **Session 7: Risk estimation from genome-wide data** \
+ [&nbsp; Lecture notes]()  
+ [&nbsp; Exercises]()
+
+ **Session 8: Somatic cancer genomics** \
+ [&nbsp; Lecture notes]()  
+ [&nbsp; Exercises]()
+
+ **Session 9: Germline cancer genomics** \
+ [&nbsp; Lecture notes]()  
+ [&nbsp; Exercises]()
+
+ **Session 10: Integrative genomics** \
+ [&nbsp; Lecture notes]()  
+ [&nbsp; Exercises]()
  
 
