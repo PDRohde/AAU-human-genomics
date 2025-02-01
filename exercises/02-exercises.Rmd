@@ -1,0 +1,115 @@
+---
+title: "Human Genomics"
+subtitle: "Session 2: Population Genomics"
+author:
+  - name: "Palle Duun Rohde"
+    url: https://pdrohde.github.io/
+    affiliation: Genomic Medicine, Aalborg University
+    email: palledr@hst.aau.dk
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = "/Users/fs61oo/Documents/GitHub/AAU-human-genomics/")
+library(kableExtra)
+```
+
+### Part 1
+#### Exercise 1
+Population geneticists analyze the extent and patterns of genetic variation within populations, the distribution of genotypes, and the influence of evolutionary forces like natural selection and genetic drift. These factors drive evolutionary change and speciation. Based on your current understanding, how would you address the following questions?
+
+1.  How can we measure genetic variation within a population?
+2.  How can we determine whether a population’s genetic structure is changing over time?
+<br />
+<br />
+
+#### Exercise 2
+Which term refers to the complete set of genetic information shared by all individuals within a population?
+
+1.  Gene pool
+2.  Genome
+3.  Chromosome complement
+4.  Breeding unit
+5.  Race
+
+Various mechanisms help preserve genetic diversity within a population. Why is maintaining this diversity beneficial?
+
+1.  Homozygosity provides an evolutionary advantage.
+2.  Increased diversity promotes inbreeding benefits.
+3.  Genetic diversity enhances a population’s ability to adapt to environmental changes.
+4.  Greater genetic diversity increases the likelihood of haploidy.
+5.  Genetic diversity prevents diploidy.
+<br />
+<br />
+
+#### Exercise 3
+Human serum contains a protein called haptoglobin, which binds to hemoglobin following the lysis of erythrocytes. In some populations, three electrophoretic haptoglobin variants are observed, determined by three autosomal co-dominant alleles: A, B, and C. Among 500 individuals, the following genotype counts were recorded:
+
+<style type="text/css">
+.tg  {border-collapse:collapse;border-color:#ccc;border-spacing:0;}
+.tg td{background-color:#fff;border-color:#ccc;border-style:solid;border-width:1px;color:#333;
+  font-family:Arial, sans-serif;font-size:14px;overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg th{background-color:#f0f0f0;border-color:#ccc;border-style:solid;border-width:1px;color:#333;
+  font-family:Arial, sans-serif;font-size:14px;font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg .tg-baqh{text-align:center;vertical-align:top}
+.tg .tg-amwm{font-weight:bold;text-align:center;vertical-align:top}
+.tg .tg-0lax{text-align:left;vertical-align:top}
+</style>
+<table class="tg"><thead>
+  <tr>
+    <th class="tg-amwm" colspan="6">No individuals</th>
+    <th class="tg-amwm">Total</th>
+  </tr></thead>
+<tbody>
+  <tr>
+    <td class="tg-baqh">AA</td>
+    <td class="tg-baqh">AB</td>
+    <td class="tg-baqh">AC</td>
+    <td class="tg-baqh">BB</td>
+    <td class="tg-baqh">BC</td>
+    <td class="tg-baqh">CC</td>
+    <td class="tg-0lax"></td>
+  </tr>
+  <tr>
+    <td class="tg-baqh">109</td>
+    <td class="tg-baqh">123</td>
+    <td class="tg-baqh">128</td>
+    <td class="tg-baqh">33</td>
+    <td class="tg-baqh">70</td>
+    <td class="tg-baqh">37</td>
+    <td class="tg-baqh">500</td>
+  </tr>
+</tbody>
+</table>
+<br />
+
+1.  Compute the genotype frequencies within the sample.
+2. Compute the allele frequency within the sample.
+<br />
+<br />
+
+#### Exercise 4
+Cystic fibrosis (CF) is an autosomal recessive disease. In individuals who are homozygous for the recessive allele, a malfunction in salt transport occurs in certain cell types, such as those in the lungs. This defect leads to thick mucus buildup, increasing the risk of bacterial lung infections.
+
+Historically, only a small number of individuals with CF survived into adulthood. In Europe, the birth prevalence of CF has been approximately 1 in 2,500 newborns. This frequency is maintained by a balance between mutation and natural selection.
+
+In a European sample, cystic fibrosis (CF) carrier status was analyzed based on three genotypes: 16,890 individuals were homozygous for the normal allele (<tt>RR</tt>), 855 individuals were heterozygous carriers (<tt>Rr</tt>), and 18 individuals were homozygous for the recessive CF allele (<tt>rr</tt>).
+
+1.  Calculate the frequency of each allele in the sample.
+<br />
+<br />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
