@@ -518,27 +518,92 @@ allele? <br /> <br /></li>
 <div id="exercise-6" class="section level4">
 <h4>Exercise 6</h4>
 <p>This exercise should be solved using <tt>R</tt>.</p>
-<p>We create a vector of genotypes:</p>
-<pre class="r"><code># define genotypes
-snp &lt;- c(rep(&quot;AA&quot;,48),rep(&quot;CA&quot;,291),rep(&quot;CC&quot;,724))</code></pre>
+<p>Run every step in the code below, and explain what each step
+does.</p>
+<pre class="r"><code># define alleles
+  A1 &lt;- &quot;A&quot;
+  A2 &lt;- &quot;a&quot;
+
+# define frequency of A1
+  p &lt;- 0.2
+  allele &lt;- c(rep(A1,p*10),rep(A2,(1-p)*10))
+
+# define population size
+  N &lt;- 100
+
+# define population
+  pop &lt;- matrix(nrow=N, ncol=2)
+  
+  for(i in 1:nrow(pop)){
+    pop[i, 1] &lt;- sample(allele, 1)
+    pop[i, 2] &lt;- sample(allele, 1)
+  }
+
+# combine alleles into genotype
+  pop &lt;- cbind(pop, paste(pop[,1],pop[,2],sep=&quot;&quot;))</code></pre>
 <p><br /></p>
 <p>We can count how many we have of each genotype using the
 <code>table(snp)</code> function.</p>
 <ol style="list-style-type: decimal">
-<li>Determine the genotype and allele frequencies.</li>
+<li>Determine the genotype and allele frequency.</li>
+<li>Make sure you understand every step.</li>
 </ol>
 <pre class="r"><code># genotype count
-obs.count &lt;- table(snp)
+  obs.count &lt;- table(pop[,3])
+
+# combine the two heterozygote genotypes (Aa and aA is the same)
+  pop[,3][pop[,3]==&quot;aA&quot;] &lt;- &quot;Aa&quot;
+  obs.count &lt;- table(pop[,3])
 
 # total number of observations
-Nobs &lt;- sum(obs.count)
+  Nobs &lt;- sum(obs.count)
 
 # genotype frequencies
-geno.freq &lt;- obs.count / Nobs
+  geno.freq &lt;- obs.count / Nobs
 
 # allele frequencies
-pA &lt;- (2*obs.count[1] + obs.count[2]) / (2*Nobs)
-pC &lt;- (2*obs.count[3] + obs.count[2]) / (2*Nobs)</code></pre>
+  p.A &lt;- (2*obs.count[&quot;AA&quot;] + obs.count[&quot;Aa&quot;]) / (2*Nobs)
+  p.a &lt;- (2*obs.count[&quot;aa&quot;] + obs.count[&quot;Aa&quot;]) / (2*Nobs)</code></pre>
+<p><br /></p>
+<ol start="3" style="list-style-type: decimal">
+<li>Does it match the expectation based on how you simulated the
+genotypes?</li>
+<li>We can redo the simulations a number of times, and with different
+population sizes.</li>
+</ol>
+<pre class="r"><code># set global parameters
+  N &lt;- seq(10,1000,10)
+  rep &lt;- 10
+  A1 &lt;- &quot;A&quot;
+  A2 &lt;- &quot;a&quot;
+  p &lt;- 0.2
+  allele &lt;- c(rep(A1,p*10),rep(A2,(1-p)*10))
+
+  p.A &lt;- matrix(nrow=rep, ncol=length(N))  
+  ´
+# run simulations
+  for(i in 1:length(N)){
+    for(j in 1:rep){
+      pop &lt;- matrix(nrow=N[i], ncol=2)  
+      
+      for(k in 1:nrow(pop)){
+        pop[k, 1] &lt;- sample(allele, 1)
+        pop[k, 2] &lt;- sample(allele, 1)
+      }
+    pop &lt;- cbind(pop, paste(pop[,1],pop[,2],sep=&quot;&quot;))
+    pop[,3][pop[,3]==&quot;aA&quot;] &lt;- &quot;Aa&quot;
+    
+    obs.count &lt;- table(pop[,3])
+    Nobs &lt;- sum(obs.count)
+    geno.freq &lt;- obs.count / Nobs
+    p.A[j,i] &lt;- (2*obs.count[&quot;AA&quot;] + obs.count[&quot;Aa&quot;]) / (2*Nobs)
+    }
+  }</code></pre>
+<ol start="5" style="list-style-type: decimal">
+<li>Why does the matrix <code>p.A</code> contains many values that are
+<code>NA</code> ?</li>
+<li>Visualise the results from these simulations.</li>
+</ol>
 <p><br /> <br /></p>
 </div>
 </div>

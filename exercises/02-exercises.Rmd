@@ -110,32 +110,93 @@ A geneticist studying a human population discovers that a recessive allele (<tt>
 #### Exercise 6 
 This exercise should be solved using <tt>R</tt>.
 
-We create a vector of genotypes:
+Run every step in the code below, and explain what each step does. 
 ```{r, eval=F}
-# define genotypes
-snp <- c(rep("AA",48),rep("CA",291),rep("CC",724))
+# define alleles
+  A1 <- "A"
+  A2 <- "a"
+
+# define frequency of A1
+  p <- 0.2
+  allele <- c(rep(A1,p*10),rep(A2,(1-p)*10))
+
+# define population size
+  N <- 100
+
+# define population
+  pop <- matrix(nrow=N, ncol=2)
+  
+  for(i in 1:nrow(pop)){
+    pop[i, 1] <- sample(allele, 1)
+    pop[i, 2] <- sample(allele, 1)
+  }
+
+# combine alleles into genotype
+  pop <- cbind(pop, paste(pop[,1],pop[,2],sep=""))
 ```
 <br />
 
 We can count how many we have of each genotype using the `table(snp)` function.
 
-1.  Determine the genotype and allele frequencies.
+1.  Determine the genotype and allele frequency. 
+2.  Make sure you understand every step.
+
 ```{r, eval=F}
 # genotype count
-obs.count <- table(snp)
+  obs.count <- table(pop[,3])
+
+# combine the two heterozygote genotypes (Aa and aA is the same)
+  pop[,3][pop[,3]=="aA"] <- "Aa"
+  obs.count <- table(pop[,3])
 
 # total number of observations
-Nobs <- sum(obs.count)
+  Nobs <- sum(obs.count)
 
 # genotype frequencies
-geno.freq <- obs.count / Nobs
+  geno.freq <- obs.count / Nobs
 
 # allele frequencies
-pA <- (2*obs.count[1] + obs.count[2]) / (2*Nobs)
-pC <- (2*obs.count[3] + obs.count[2]) / (2*Nobs)
+  p.A <- (2*obs.count["AA"] + obs.count["Aa"]) / (2*Nobs)
+  p.a <- (2*obs.count["aa"] + obs.count["Aa"]) / (2*Nobs)
+```
+<br />
+
+3.  Does it match the expectation based on how you simulated the genotypes? 
+4.  We can redo the simulations a number of times, and with different population sizes.
+```{r, eval=F}
+# set global parameters
+  N <- seq(10,1000,10)
+  rep <- 10
+  A1 <- "A"
+  A2 <- "a"
+  p <- 0.2
+  allele <- c(rep(A1,p*10),rep(A2,(1-p)*10))
+
+  p.A <- matrix(nrow=rep, ncol=length(N))  
+  ´
+# run simulations
+  for(i in 1:length(N)){
+    for(j in 1:rep){
+      pop <- matrix(nrow=N[i], ncol=2)  
+      
+      for(k in 1:nrow(pop)){
+        pop[k, 1] <- sample(allele, 1)
+        pop[k, 2] <- sample(allele, 1)
+      }
+    pop <- cbind(pop, paste(pop[,1],pop[,2],sep=""))
+    pop[,3][pop[,3]=="aA"] <- "Aa"
+    
+    obs.count <- table(pop[,3])
+    Nobs <- sum(obs.count)
+    geno.freq <- obs.count / Nobs
+    p.A[j,i] <- (2*obs.count["AA"] + obs.count["Aa"]) / (2*Nobs)
+    }
+  }
+
 ```
 
-
+5.  Why does the matrix `p.A` contains many values that are `NA` ?
+6.  Visualise the results from these simulations.
 
 <br />
 <br />
