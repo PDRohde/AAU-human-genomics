@@ -359,8 +359,8 @@ University<br><a class="author_email" href="mailto:#"><a href="mailto:palledr@hs
 </div>
 
 
-<div id="part-1" class="section level3">
-<h3>Part 1</h3>
+<div id="part-i" class="section level3">
+<h3>Part I</h3>
 <div id="exercise-1" class="section level4">
 <h4>Exercise 1</h4>
 <p>Population geneticists analyze the extent and patterns of genetic
@@ -500,6 +500,50 @@ recessive CF allele (<tt>rr</tt>).</p>
 <br /></li>
 </ol>
 </div>
+<div id="exercise-5" class="section level4">
+<h4>Exercise 5</h4>
+<p>A geneticist studying a human population discovers that a recessive
+allele (<tt>s</tt>) associated with sickle cell disease is present in a
+community of 1,024 individuals. Individuals carrying two copies of the
+recessive allele (<tt>ss</tt>) develop sickle cell disease, while those
+with at least one dominant allele (<tt>S</tt>) have normal red blood
+cells. Within the population, 1 in 256 individuals has sickle cell
+disease, indicating they are homozygous recessive (<tt>ss</tt>).</p>
+<ol style="list-style-type: decimal">
+<li>Assuming random mating and no selection for this gene, how many
+individuals with normal red blood cells are carriers of the recessive
+allele? <br /> <br /></li>
+</ol>
+</div>
+<div id="exercise-6" class="section level4">
+<h4>Exercise 6</h4>
+<p>This exercise should be solved using <tt>R</tt>.</p>
+<p>We create a vector of genotypes:</p>
+<pre class="r"><code># define genotypes
+snp &lt;- c(rep(&quot;AA&quot;,48),rep(&quot;CA&quot;,291),rep(&quot;CC&quot;,724))</code></pre>
+<p><br /></p>
+<p>We can count how many we have of each genotype using the
+<code>table(snp)</code> function.</p>
+<ol style="list-style-type: decimal">
+<li>Determine the genotype and allele frequencies.</li>
+</ol>
+<pre class="r"><code># genotype count
+obs.count &lt;- table(snp)
+
+# total number of observations
+Nobs &lt;- sum(obs.count)
+
+# genotype frequencies
+geno.freq &lt;- obs.count / Nobs
+
+# allele frequencies
+pA &lt;- (2*obs.count[1] + obs.count[2]) / (2*Nobs)
+pC &lt;- (2*obs.count[3] + obs.count[2]) / (2*Nobs)</code></pre>
+<p><br /> <br /></p>
+</div>
+</div>
+<div id="part-ii" class="section level3">
+<h3>Part II</h3>
 </div>
 
 

@@ -15,7 +15,7 @@ knitr::opts_knit$set(root.dir = "/Users/fs61oo/Documents/GitHub/AAU-human-genomi
 library(kableExtra)
 ```
 
-### Part 1
+### Part I
 #### Exercise 1
 Population geneticists analyze the extent and patterns of genetic variation within populations, the distribution of genotypes, and the influence of evolutionary forces like natural selection and genetic drift. These factors drive evolutionary change and speciation. Based on your current understanding, how would you address the following questions?
 
@@ -100,7 +100,47 @@ In a European sample, cystic fibrosis (CF) carrier status was analyzed based on 
 <br />
 <br />
 
+#### Exercise 5
+A geneticist studying a human population discovers that a recessive allele (<tt>s</tt>) associated with sickle cell disease is present in a community of 1,024 individuals. Individuals carrying two copies of the recessive allele (<tt>ss</tt>) develop sickle cell disease, while those with at least one dominant allele (<tt>S</tt>) have normal red blood cells. Within the population, 1 in 256 individuals has sickle cell disease, indicating they are homozygous recessive (<tt>ss</tt>).
 
+1.	Assuming random mating and no selection for this gene, how many individuals with normal red blood cells are carriers of the recessive allele?
+<br />
+<br />
+
+#### Exercise 6 
+This exercise should be solved using <tt>R</tt>.
+
+We create a vector of genotypes:
+```{r, eval=F}
+# define genotypes
+snp <- c(rep("AA",48),rep("CA",291),rep("CC",724))
+```
+<br />
+
+We can count how many we have of each genotype using the `table(snp)` function.
+
+1.  Determine the genotype and allele frequencies.
+```{r, eval=F}
+# genotype count
+obs.count <- table(snp)
+
+# total number of observations
+Nobs <- sum(obs.count)
+
+# genotype frequencies
+geno.freq <- obs.count / Nobs
+
+# allele frequencies
+pA <- (2*obs.count[1] + obs.count[2]) / (2*Nobs)
+pC <- (2*obs.count[3] + obs.count[2]) / (2*Nobs)
+```
+
+
+
+<br />
+<br />
+
+### Part II
 
 
 
