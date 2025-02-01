@@ -31,52 +31,36 @@ The course responsible is Palle Duun Rohde ([Email](mailto:palledr@hst.aau.dk?su
  [&nbsp; Exercises]()  
 
  **Session 3: Risk estimation from pedigrees** \
-<! ––
- [&nbsp; Lecture notes]()  
- [&nbsp; Exercises]()
-––>
+<!--[&nbsp; Lecture notes]() -->
+<!--[&nbsp; Exercises]() -->
 
  **Session 4: Complex traits and quantitative genetics** \
-<! ––
- [&nbsp; Lecture notes]()  
- [&nbsp; Exercises]()
-––>
+<!--[&nbsp; Lecture notes]() -->
+<!--[&nbsp; Exercises]() -->
 
  **Session 5: Estimation of genetic parameters** \
-<! ––
- [&nbsp; Lecture notes]()  
- [&nbsp; Exercises]()
-––>
+<!--[&nbsp; Lecture notes]() -->
+<!--[&nbsp; Exercises]() -->
 
  **Session 6: Genome-wide association studies** \
-<! ––
- [&nbsp; Lecture notes]()  
- [&nbsp; Exercises]()
-––>
+<!--[&nbsp; Lecture notes]() -->
+<!--[&nbsp; Exercises]() -->
 
  **Session 7: Risk estimation from genome-wide data** \
-<! ––
- [&nbsp; Lecture notes]()  
- [&nbsp; Exercises]()
-––>
+<!--[&nbsp; Lecture notes]() -->
+<!--[&nbsp; Exercises]() -->
 
  **Session 8: Somatic cancer genomics** \
-<! ––
- [&nbsp; Lecture notes]()  
- [&nbsp; Exercises]()
-––>
+<!--[&nbsp; Lecture notes]() -->
+<!--[&nbsp; Exercises]() -->
 
  **Session 9: Germline cancer genomics** \
-<! ––
- [&nbsp; Lecture notes]()  
- [&nbsp; Exercises]()
-––>
+<!--[&nbsp; Lecture notes]() -->
+<!--[&nbsp; Exercises]() -->
 
  **Session 10: Integrative genomics** \
-<! ––
- [&nbsp; Lecture notes]()  
- [&nbsp; Exercises]()
-––>
+<!--[&nbsp; Lecture notes]() -->
+<!--[&nbsp; Exercises]() -->
 
  
 
