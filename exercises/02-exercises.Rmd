@@ -8,7 +8,18 @@ author:
     email: palledr@hst.aau.dk
 output: html_document
 ---
+<style type="text/css">
 
+body, td {
+   font-size: 14px;
+}
+code.r{
+  font-size: 12px;
+}
+pre {
+  font-size: 12px
+}
+</style>
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_knit$set(root.dir = "/Users/fs61oo/Documents/GitHub/AAU-human-genomics/")
@@ -173,7 +184,9 @@ We can count how many we have of each genotype using the `table(snp)` function.
   allele <- c(rep(A1,p*10),rep(A2,(1-p)*10))
 
   p.A <- matrix(nrow=rep, ncol=length(N))  
-  ´
+  colnames(p.A) <- N
+  rownames(p.A) <- paste("rep",1:rep,sep="")
+  
 # run simulations
   for(i in 1:length(N)){
     for(j in 1:rep){
@@ -196,15 +209,88 @@ We can count how many we have of each genotype using the `table(snp)` function.
 ```
 
 5.  Why does the matrix `p.A` contains many values that are `NA` ?
-6.  Visualise the results from these simulations.
+6.  Visualise the results from these simulations. What do you see?
+```{r, eval=F}
+library(ggplot2)
+library(reshape2)
+p.A <- melt(p.A)
+ggplot(p.A[!is.na(p.A$value),], aes(x = Var2, y = value, fill = factor(Var2))) +
+  geom_hline(yintercept = p, linetype = "dashed", color = "darkorange", linewidth = 0.75) +
+  geom_boxplot(alpha = 0.6) + 
+   coord_cartesian(ylim = c(0.1, 0.35)) +
+  labs(x = "N", y = "p(A)", title = "") +
+  theme_classic() + theme(legend.position = "none") 
+```
+<br />
+<br />
 
+#### Exercise 7
+In the second part of these exercises, we will examine deviations from expected genotype frequencies. According to the Hardy-Weinberg principle, genotype frequencies can be predicted from allele frequencies under certain assumptions. Specifically, if allele A has a frequency of p and allele a has a frequency of q, the expected genotype frequencies are:
+
+-  <tt>AA</tt> $p^2$
+-  <tt>Aa</tt> $2pq$
+-  <tt>aa</tt> $q^2$
+
+Next, we will create a figure that visualizes the predicted genotype frequencies for different values of p. Take the time to review and understand the code used to generate it.
+```{r, fig.align='center',fig.width=5,fig.height=4}
+curve(2*x*(1-x),col="darkblue", ylim=c(0,1), lwd=2, xlab="Allele frequency", ylab="Genotype frequency", las=1)
+  text(x=0.5, y=0.7, labels="Aa", col="darkblue", font=2)
+curve(x**2,col="darkgreen", add=T, ylab="NULL", ylim=c(0,1), lwd=2)
+  text(x=0.9, y=0.7, labels="AA", col="darkgreen", font=2)
+curve((1-x)**2,col="darkred",add=T, ylab="NULL", ylim=c(0,1),lwd=2)
+  text(x=0.1, y=0.7, labels="aa", col="darkred", font=2)
+```
 <br />
 <br />
 
 ### Part II
 
+#### Exercise 8
+In a study of 10,000 individuals of Danish ancestry, researchers analyzed two genetic loci, including the _CFTR_ gene (associated with cystic fibrosis) and the <tt>APOE</tt> gene (linked to Alzheimer’s disease risk). These loci were chosen due to their well-established roles in disease susceptibility and health outcomes, providing insights into the genetic factors influencing these conditions in the population.
 
+<style type="text/css">
+.tg  {border-collapse:collapse;border-spacing:0;}
+.tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg .tg-c3ow{border-color:inherit;text-align:center;vertical-align:top}
+.tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}
+</style>
+<table class="tg"><thead>
+  <tr>
+    <th class="tg-c3ow" colspan="3"><span style="font-weight:bold;font-style:italic">CFTR</span></th>
+    <th class="tg-0pky"></th>
+    <th class="tg-c3ow" colspan="3"><span style="font-weight:bold;font-style:italic">APO</span><span style="font-weight:bold">E</span></th>
+  </tr></thead>
+<tbody>
+  <tr>
+    <td class="tg-c3ow">WT | WT</td>
+    <td class="tg-c3ow">WT | F508del<br></td>
+    <td class="tg-c3ow">F508del | F508del</td>
+    <td class="tg-c3ow"></td>
+    <td class="tg-c3ow">ε3 | ε3</td>
+    <td class="tg-c3ow">ε3 | ε4</td>
+    <td class="tg-c3ow">ε4 | ε4</td>
+  </tr>
+  <tr>
+    <td class="tg-c3ow"><span style="color:black">3156</span></td>
+    <td class="tg-c3ow"><span style="color:black">4997</span></td>
+    <td class="tg-c3ow"><span style="color:black">1847</span></td>
+    <td class="tg-c3ow"></td>
+    <td class="tg-c3ow"><span style="color:black">6837</span></td>
+    <td class="tg-c3ow"><span style="color:black">3065</span></td>
+    <td class="tg-c3ow"><span style="color:black">98</span></td>
+  </tr>
+</tbody></table>
+<br />
+<br />
 
+1.  Compute the allele- and genotype frequencies for the two alleles in both the _CFTR_- and _APOE_-locus.
+2.  Perform the necessary calculations to determine whether the allele frequencies at the two loci follow Hardy-Weinberg equilibrium proportions.
+
+<br />
+<br />
 
 
 

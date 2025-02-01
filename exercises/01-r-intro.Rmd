@@ -9,7 +9,18 @@ author:
 date: "2025-01-26"
 output: html_document
 ---
+<style type="text/css">
 
+body, td {
+   font-size: 14px;
+}
+code.r{
+  font-size: 12px;
+}
+pre {
+  font-size: 12px
+}
+</style>
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_knit$set(root.dir = "/Users/fs61oo/Documents/GitHub/AAU-human-genomics/")
