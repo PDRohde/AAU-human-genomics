@@ -23,7 +23,8 @@ pre {
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_knit$set(root.dir = "/Users/fs61oo/Documents/GitHub/AAU-human-genomics/")
-library(kableExtra)
+library(ggplot2)
+set.seed(666)
 ```
 
 ### Part I
@@ -288,15 +289,362 @@ In a study of 10,000 individuals of Danish ancestry, researchers analyzed two ge
 
 1.  Compute the allele- and genotype frequencies for the two alleles in both the _CFTR_- and _APOE_-locus.
 2.  Perform the necessary calculations to determine whether the allele frequencies at the two loci follow Hardy-Weinberg equilibrium proportions.
+<br />
+<br />
 
+#### Exercise 9
+
+Cystic fibrosis (CF) is an autosomal, recessive disease. Homozygotes individuals (<tt>F508del|F508del</tt>) have reduced function of the salt transporters in some cell types, including the lungs. This entails mucus in the airways which increases the risk of bacterial infections.
+
+Until recently, only few individuals survived to adulthood. In Europe, the frequency of newborns with CF has historical been 1:2500. This rate is maintained by a balance between selection ($s$) and mutation (&mu;).
+
+In a study blood samples were collected to determine the genotype frequency of a certain CF mutation. The disease-causing allele is called <tt>F508del</tt>, while the non-disease-causing allele is called <tt>WT</tt>. The genotypes of the enrolled participants are shown in the table below.
+
+<style type="text/css">
+.tg  {border-collapse:collapse;border-color:#ccc;border-spacing:0;}
+.tg td{background-color:#fff;border-color:#ccc;border-style:solid;border-width:1px;color:#333;
+  font-family:Arial, sans-serif;font-size:14px;overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg th{background-color:#f0f0f0;border-color:#ccc;border-style:solid;border-width:1px;color:#333;
+  font-family:Arial, sans-serif;font-size:14px;font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg .tg-baqh{text-align:center;vertical-align:top}
+.tg .tg-c3ow{border-color:inherit;text-align:center;vertical-align:top}
+</style>
+<table class="tg"><thead>
+  <tr>
+    <th class="tg-c3ow" colspan="3"><span style="font-weight:bold;font-style:italic">CFTR</span></th>
+  </tr></thead>
+<tbody>
+  <tr>
+    <td class="tg-c3ow">WT | WT</td>
+    <td class="tg-c3ow">WT | F508del<br></td>
+    <td class="tg-c3ow">F508del | F508del</td>
+  </tr>
+  <tr>
+    <td class="tg-baqh">16890</td>
+    <td class="tg-baqh">855</td>
+    <td class="tg-baqh">18</td>
+  </tr>
+</tbody>
+</table>
+
+1.  Compute the allele frequency in the sample.
+2.  How many individuals do you expect to be born with each genotype if the sample is in Hardy-Weinberg proportions?
+3.  Is the sample in Hardy-Weinberg proportions?
+4.  Compute what the mutation rate (&mu;) must be, when there in the population through many generations has been maintained a frequency of 1:2500 among newborns and when the fitness ($w=1-s$) of CF-individuals is 0%.
+5.  Assume that a new medical treatment for CF has been developed such that patients with CF live longer and many of the CF-carriers also get children. This entails that the fitness of individuals with CF is changed to 40% compared to persons without CF. At equilibrium, what will the new frequency be of the CF-allele <tt>F508del</tt>, and what will the frequency be of newborns with CF?
+<br />
+<br />
+
+#### Exercise 10 
+
+Out of 2,400 births at a UK hospital, 6 newborn deaths were recorded, all of which were attributed to a colon defect caused by a recessive lethal allele (<tt>co</tt>) that follows an autosomal inheritance pattern. Assuming Hardy-Weinberg equilibrium, answer the following:
+
+1.  What is the frequency of the co allele in the newborn population?
+
+2.  What is the frequency of heterozygous carriers in both newborns and adults?
 <br />
 <br />
 
 
+#### Exercise 11
+
+Red-green colour blindness is caused by a recessive, X-linked gene (<tt>f</tt>). In a large population, the frequency of the <tt>f</tt> allele is denoted as $q$ in both males and females. Assuming random mating and no selection, answer the following:
+
+1.  What is the expected frequency of colour-blind females in the population?
+2.  What is the expected frequency of marriages between a colour-blind male and a non-colour-blind female?
+3.  What is the expected frequency of colour-blind boys born from a colour-blind father and a non-colour-blind mother?
+<br />
+<br />
+
+#### Exercise 12
+Now we will use R to test for Hardy-Weinberg proportion. Run every step in the code below, and explain what each step does.
+
+First we define variables.
+```{r, eval=F}
+# define genotype counts
+  AA <- 375
+  Aa <- 165
+  aa <- 32
+  
+# find the total number of individuals
+  n <- AA+Aa+aa
+```
+
+We can calculate the allele frequencies from the observed genotype counts.
+```{r, eval=F}
+p <- (2*AA + Aa) / (2*n)
+q <- c(2*aa + Aa) / (2*n)
+
+# check that we have counted all alleles
+p+q == 1
+```
+
+Using the allele frequencies we can compute the expected genotype frequencies if the population is in Hardy-Weinberg equlibrium.
+```{r, eval=F}
+# calculating expected values  
+  E.AA <- n*p**2
+  E.Aa <- n*2*p*q
+  E.aa <- n*q**2
+
+# check that we have counted all individuals
+  E.AA + E.Aa + E.aa == n
+```
+
+We can do a formal statistical test for whether the number of genotypes we observe matches our expectations. This is done using a $\chi^2$-test which is defined as:
+$$\chi^2 = \sum_{i=1}^{geno} = \frac{(E - O)^2}{E}$$
+where $E$ is the expected number of counts, and O is the observed number of counts, which is summed across all genotype categories ($geno$).
+
+The $\chi^2$-statistican can be calculated as:
+```{r, eval=F}
+# compute chi-square test-statistic
+  chi2 <- (E.AA-AA)^2/E.AA + (E.Aa-Aa)^2/E.Aa + (E.aa-aa)^2/E.aa
+```
 
 
+Next we have to determine whether the $\chi^2$-statistic is larger than expected.  To compute the probability value (i.e., _P_-value) from a $\chi^2$-distribution we can use the function `pchisq()` with the argument `lower.tail=FALSE` because we to see the probability that the $\chi^2$ value being higher than it is. To have an appropriate distribution, we need to add how many degrees of freedom (df) to consider, $df=\frac{n(n1)}{n}$, where $n=\textrm{no. alleles}$. Thus, in our example, $df=\frac{2(2-1)}{2}=1$.
+```{r, eval=F}
+# obtain P-value
+  pval <-pchisq(chi2, df=1, lower.tail=FALSE)
+```
+```{r, eval=T,echo=F}
+chi2 <- 5.622959
+pval <- 0.01772669
+geno <- c(375, 165, 32)
+expe <- c(365.92, 183.16, 22.92002)
+dat <- matrix(c(geno,expe),nrow=2, byrow=T)
+```
+
+Therefore, the _P_-value is `r round(pval,3)`, indicating that at a 5% significance level, our sample does not support the Hardy-Weinberg equilibrium. The figure below shows the $\chi^2$-distribution with $df=1$ where the vertical line shows the $\chi^2$-value from our analysis.
+
+```{r, echo=F, fig.align='center', fig.width=5,fig.height=4}
+x <- seq(0, 10, 0.1)
+y <- dchisq(x, df = 1)
+df <- data.frame(x = x, y = y)
+ggplot(data = df, aes(x = x, y = y)) +
+  geom_line(color = "darkblue", linewidth = .75) +
+  geom_vline(xintercept = chi2, linewidth = .75, color = "darkorange", linetype = "dashed") + 
+  labs(y = "Density Function",
+       x = expression(chi^2)) + 
+  theme_minimal()
+```
+
+We can visualise the observed and expected genotype counts to get an idea of why the sample is not in Hardy-Weinberg. 
+
+```{r, eval=F}
+geno <- c(AA, Aa, aa)
+expe <- c(E.AA, E.Aa, E.aa)
+dat <- matrix(c(geno,expe),nrow=2, byrow=T)
+```
+
+```{r, fig.align='center', fig.height=4,fig.width=4}
+barplot(dat, beside=T, col=c("#6D8325FF", "#BD5630FF"), names.arg=c("AA","Aa","aa"), las=1, cex.axis=.8, xlab="Genotype", ylab="Genotype counts")
+legend("topright",legend=c("Observed", "Expected"),pch=15, col=c("#6D8325FF", "#BD5630FF"), cex=.8)
+```
+
+1.  What possible explanations can you provide for why this sample does not follow Hardy-Weinberg equilibrium?
+
+<br />
+<br />
+
+### Part III
+
+#### Exercise 13
+1.  Given a population with an average inbreeding coefficient ($F$) and allele frequencies $p$ (for allele <tt>A</tt>) and $q$ (for allele <tt>a</tt>), what are the expected genotype frequencies at this locus? Additionally, how does inbreeding influence both allele frequencies and genotype frequencies?
+2.  Compute the inbreeding coefficient for individual <tt>K</tt> in the pedigree below.
+3.	It turns out that individual <tt>C</tt> in the pedigree above is the offspring of a cousin marriage. Redraw the pedigree focusing on individual <tt>C</tt>, and use this updated information to calculate the inbreeding coefficient ($F$) for individual <tt>K</tt>.
+<br />
+  
+<p align="center">
+<img src="./grx/exercises-02_e12.png"  style="width:30%; height:auto;">
+</p>
+<br />
+<br />
+
+#### Exercise 14
+The ability to taste the bitter compound phenylthiocarbamide (PTC) is controlled by a dominant allele (<tt>T</tt>), meaning individuals with at least one <tt>T</tt> allele can perceive its bitterness, while <tt>t</tt> homozygotes cannot. PTC tasting is linked to variation in the _TAS2R38_ gene, which encodes a bitter taste receptor on the tongue.
+
+PTC itself is not found in foods but is chemically similar to naturally occurring bitter compounds in certain vegetables, such as broccoli, Brussels sprouts, kale, and cabbage. The ability to taste these compounds may have evolutionary significance, as it could help individuals avoid toxic plants that contain bitter-tasting alkaloids.
+
+1.  In a study of 100 students, 62 individuals had the <tt>TT</tt> genotype (strong tasters), 32 had the <tt>Tt</tt> genotype (moderate tasters), and 6 had the <tt>tt</tt> genotype (non-tasters). Calculate the allele frequencies of <tt>T</tt> and <tt>t</tt> in this population.
+2. Using the observed genotype frequencies, assess whether the population is in Hardy-Weinberg equilibrium by comparing expected and observed proportions.
+<br />
+<br />
+
+#### Exercise 15
+In the <tt>R</tt>-exercise we will investigate how population size can influence the fixation and extinction probabilities of individual alleles.
+
+The function below `sim` allow you to see how generation time, number of independent populations, and starting allele frequencies affect the probability to loose alleles.
+```{r}
+# Function to simulate allele frequency across generations for multiple populations
+sim <- function(pop_size, generations, num_populations = 1, allele_freqs = 0.5) {
+  
+  # Create a list to store allele frequencies for each population
+  freq_matrix_list <- vector("list", num_populations)
+  
+  # Run the simulations
+  for (p in 1:num_populations) {
+    allele_freq <- allele_freqs[p]
+    freq_matrix <- matrix(NA, nrow = generations, ncol = 1)
+    current_freq <- allele_freq
+    freq_matrix[1, 1] <- current_freq  # Store the initial allele frequency
+      
+    for (gen in 2:generations) {
+      # Simulate the allele frequency for the next generation using binomial sampling
+      a <- rbinom(1, 2*pop_size, current_freq) 
+      current_freq <- a/(2*pop_size)
+      freq_matrix[gen, 1] <- current_freq
+    }
+    
+    freq_matrix_list[[p]] <- freq_matrix
+  }
+  
+  return(freq_matrix_list)
+}
+```
+
+The function below allow us to run several simulations and collect the results.
+```{r}
+  run_sim <- function(population_sizes=NULL, generations=NULL, num_populations=NULL, initial_allele_freqs=NULL){
+    # Store the results in a data frame
+    results <- data.frame()
+
+    # Run the simulation for different population sizes
+    for (pop_size in population_sizes) {
+      freq_matrix_list <- sim(pop_size,generations,num_populations,allele_freqs = initial_allele_freqs)
+  
+      # Prepare the data for plotting
+      for (p in 1:num_populations) {
+        freq_matrix <- freq_matrix_list[[p]]
+        temp_df <- data.frame(
+          generation = rep(1:generations),
+          freq = as.vector(freq_matrix),
+          population_size = rep(pop_size, generations),
+          population_num = rep(p, generations))
+      results <- rbind(results, temp_df)
+      }
+    }
+    
+  return(results)
+  }
+```
+<br />
+<br />
 
 
+```{r}
+# Parameters
+  population_sizes <- c(10, 50, 100)
+  generations <- 100
+  num_populations <- 1
+  initial_allele_freqs <- c(0.5,0.5, 0.5) 
+
+  tmp <- run_sim(population_sizes=population_sizes, 
+                 generations=generations, 
+                 num_populations=num_populations, 
+                 initial_allele_freqs=initial_allele_freqs)
+
+# Count how many populations that has been fixed  
+  tmp$fixed <- paste(tmp$population_size,":",tmp$population_num,sep="")
+  is.fixed <- NULL
+  for(pop in unique(tmp$fixed)){
+    is.fixed <- c(is.fixed, any(tmp[tmp$fixed==pop,]$freq==0 | tmp[tmp$fixed==pop,]$freq==1))
+  }
+```
+<br />
+<br />
+Make a plot to visualise the results.
+```{r, fig.align='center', fig.height=4,fig.width=5}
+  ggplot(tmp, aes(x = generation, y = freq, 
+                  group = interaction(population_size, population_num), 
+                  color = as.factor(fixed))) +
+    geom_line(alpha = 0.7) +
+    labs(title = paste("Number of populations fixed:", sum(is.fixed)),
+       x = "Generation",
+       y = "Allele Frequency",
+       color = "Population Number") +
+    scale_y_continuous(limits = c(0, 1)) +
+    theme_minimal() +
+    theme(legend.position = "bottom") 
+
+```
+<br />
+<br />
+
+**Allow migration**
+A fraction (migration_rate) of individuals in the population is replaced by migrants from an external source population.
+The new allele frequency after migration is:
+
+$$p{\prime} = (1 - m) p + m P_m$$
+
+-  $m$  = migration_rate (proportion of migrants each generation),
+-  $p$  = current allele frequency in the population,
+-  $P_m$  = migrant_freq (allele frequency of migrants).
+
+**Allow mutations**
+The allele frequency update follows:
+
+$$p{\prime} = (1 - \mu) p + \mu (1 - p)$$
+	
+-  $p$  = current allele frequency,
+-  $\mu$  = mutation rate.
+
+```{r, eval=F}
+#mu: Mutation rate (default = 0, meaning no mutation).
+#	Mutations allow alleles to change from one type to another, preventing complete fixation.
+#mu = 0.001 means a mutation rate of 0.1% per generation.
 
 
+# Function to simulate allele frequency changes with drift, migration, and mutation
+sim <- function(pop_size, generations, num_populations = 1, allele_freqs = 0.5, 
+                migration_rate = 0, migrant_freq = 0.5, mu = 0) {
+  
+  # Create a list to store allele frequencies for each population
+  freq_matrix_list <- vector("list", num_populations)
+  
+  # Run the simulations
+  for (p in 1:num_populations) {
+    allele_freq <- allele_freqs[p]
+    freq_matrix <- matrix(NA, nrow = generations, ncol = 1)
+    current_freq <- allele_freq
+    freq_matrix[1, 1] <- current_freq  # Store the initial allele frequency
+    
+    for (gen in 2:generations) {
+      # Step 1: Genetic Drift (Binomial Sampling)
+      a <- rbinom(1, 2 * pop_size, current_freq) 
+      current_freq <- a / (2 * pop_size)
+      
+      # Step 2: Migration Effect
+      if (migration_rate > 0) {
+        current_freq <- (1 - migration_rate) * current_freq + migration_rate * migrant_freq
+      }
+      
+      # Step 3: Mutation Effect
+      if (mu > 0) {
+        current_freq <- (1 - mu) * current_freq + mu * (1 - current_freq)
+      }
+      
+      freq_matrix[gen, 1] <- current_freq
+    }
+    
+    freq_matrix_list[[p]] <- freq_matrix
+  }
+  
+  return(freq_matrix_list)
+}
+```
+
+```{r, eval=F}
+# Simulation with Drift + Migration + Mutation
+sim(pop_size = 100, generations = 50, num_populations = 3, allele_freqs = c(0.4, 0.6, 0.8), 
+    migration_rate = 0.05, migrant_freq = 0.7, mu = 0.001)
+```
+
+```{r, eval=F}
+# Simulation with Only Drift and Mutation (No Migration)
+sim(pop_size = 100, generations = 50, num_populations = 3, allele_freqs = c(0.4, 0.6, 0.8), 
+    migration_rate = 0, mu = 0.005)
+```
+
+<br />
+<br />
 
