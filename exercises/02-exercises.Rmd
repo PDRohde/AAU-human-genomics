@@ -24,6 +24,7 @@ pre {
 knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_knit$set(root.dir = "/Users/fs61oo/Documents/GitHub/AAU-human-genomics/")
 library(ggplot2)
+library(patchwork)
 set.seed(666)
 ```
 
@@ -528,8 +529,6 @@ The function below allow us to run several simulations and collect the results.
   return(results)
   }
 ```
-<br />
-<br />
 
 In the first example, we simulate 10 different populations, each consisting of 100 individuals, with an initial allele frequency of 0.5. We will run the simulation for 100 generations.
 ```{r}
@@ -551,8 +550,8 @@ In the first example, we simulate 10 different populations, each consisting of 1
     is.fixed <- c(is.fixed, any(sim.res[sim.res$fixed==pop,]$freq==0 | sim.res[sim.res$fixed==pop,]$freq==1))
   }
 ```
-<br />
-<br />
+
+With the code below we can plot the results.
 ```{r, fig.align='center', fig.height=4,fig.width=5}
   ggplot(sim.res, aes(x = generation, y = freq, 
                       group = interaction(population_size, population_num), 
@@ -573,10 +572,13 @@ In the first example, we simulate 10 different populations, each consisting of 1
 1.  With you own words, describe what is happening in the figure above.
 2.  In the next simulation, change `population_sizes <- c(10,50,100)`. How does that affect the results?
 3.  How does varying the `initial_allele_freqs` affect the probability of fixation?
+<br />
+<br />
 
+##### Migration and mutation
 
-**Allow migration**
-A fraction (migration_rate) of individuals in the population is replaced by migrants from an external source population.
+**Allow migration** <br />
+A fraction (`migration_rate`) of individuals in the population is replaced by migrants from an external source population.
 The new allele frequency after migration is:
 
 $$p{\prime} = (1 - m) p + m P_m$$
@@ -585,20 +587,15 @@ $$p{\prime} = (1 - m) p + m P_m$$
 -  $p$  = current allele frequency in the population,
 -  $P_m$  = migrant_freq (allele frequency of migrants).
 
-**Allow mutations**
+**Allow mutations** <br />
 The allele frequency update follows:
 
 $$p{\prime} = (1 - \mu) p + \mu (1 - p)$$
 	
 -  $p$  = current allele frequency,
--  $\mu$  = mutation rate.
+-  $\mu$  = mutation rate per generation
 
-```{r, eval=F}
-#mu: Mutation rate (default = 0, meaning no mutation).
-#	Mutations allow alleles to change from one type to another, preventing complete fixation.
-#mu = 0.001 means a mutation rate of 0.1% per generation.
-
-
+```{r}
 # Function to simulate allele frequency changes with drift, migration, and mutation
 sim <- function(pop_size, generations, num_populations = 1, allele_freqs = 0.5, 
                 migration_rate = 0, migrant_freq = 0.5, mu = 0) {
@@ -638,18 +635,98 @@ sim <- function(pop_size, generations, num_populations = 1, allele_freqs = 0.5,
 }
 ```
 
-```{r, eval=F}
-# Simulation with Drift + Migration + Mutation
-sim(pop_size = 100, generations = 50, num_populations = 3, allele_freqs = c(0.4, 0.6, 0.8), 
-    migration_rate = 0.05, migrant_freq = 0.7, mu = 0.001)
+
+Below we simulate three independent populations (`num_populations <- 3`) of the same size (`pop_size <- 100`), three diferent starting values of allele frequencies (`allele_freqs <- c(0.4, 0.6, 0.8)`), and a mutation-rate of 0.01.
+```{r}
+# Setup parameters for simulations allowing mutations
+  pop_size <- 100
+  generations <- 50
+  num_populations <- 3
+  allele_freqs <- c(0.4, 0.6, 0.8)
+  migration_rate <- 0
+  mu <- 0.01
+  
+  sim.res <- sim(pop_size = pop_size, 
+                 generations = generations, 
+                 num_populations = num_populations, 
+                 allele_freqs = allele_freqs, 
+                 migration_rate = migration_rate, 
+                 mu = mu)
+
+  sim.res <- do.call(rbind,sim.res)
+  sim.res <- data.frame(freq=sim.res[,1], 
+                        generation=rep(1:generations, num_populations),
+                        af=sort(rep(allele_freqs, generations)))
+
 ```
 
-```{r, eval=F}
-# Simulation with Only Drift and Mutation (No Migration)
-sim(pop_size = 100, generations = 50, num_populations = 3, allele_freqs = c(0.4, 0.6, 0.8), 
-    migration_rate = 0, mu = 0.005)
+```{r, fig.align='center', fig.height=4,fig.width=4}
+  ggplot(sim.res, aes(x = generation, y = freq, 
+                      color = as.factor(af))) +
+    geom_line(alpha = 0.7) +
+    labs(title ="",
+       x = "Generation",
+       y = "Allele Frequency",
+       color = "Initial allele frequency") +
+    scale_y_continuous(limits = c(0, 1)) +
+    theme_minimal() +
+    theme(legend.position = "bottom") 
+
 ```
 
+4.  How does the results from the previous simulations compare to when you allow for small - moderate levels of mutation? Fx `mu=0.005`,`mu=0.01`.
+5.  What happens when you change the starting allele frequencies?
+
+Next, we look into the effect of migration. We run three simulations with varying degree of migration (`m <- c(0,0.01,0.1)`).
+```{r}
+# Setup parameters for simulations allowing migration
+  pop_size <- 100
+  generations <- 50
+  num_populations <- 10
+  allele_freqs <- rep(0.5,10)
+  mu <- 0
+  
+  m <- c(0,0.01,0.1)
+  sim.res <- vector(length(m),mode="list")
+  for(i in 1:length(m)){
+  
+    tmp.res <- sim(pop_size = pop_size, 
+                 generations = generations, 
+                 num_populations = num_populations, 
+                 allele_freqs = allele_freqs, 
+                 migration_rate = m[i], 
+                 mu = mu)
+
+    tmp.res <- do.call(rbind,tmp.res)
+    tmp.res <- data.frame(freq=tmp.res[,1], 
+                        generation=rep(1:generations, num_populations),
+                        pop=sort(rep(1:num_populations,generations)),
+                        migration=rep(m[i],nrow(tmp.res)))
+
+    sim.res[[i]] <- tmp.res  
+  }
+sim.res <- do.call(rbind,sim.res)
+  
+```
+
+```{r, fig.align='center',fig.height=4,fig.width=8}
+ ggplot(sim.res, aes(x = generation, y = freq, 
+                      color = as.factor(pop))) +
+      facet_wrap(~ migration) +
+      geom_line(alpha = 0.7) +
+      labs(title ="",
+         x = "Generation",
+         y = "Allele Frequency",
+         color = "Population") +
+      scale_y_continuous(limits = c(0, 1)) +
+      theme_minimal() +
+      theme(legend.position = "bottom") 
+```
+
+6.  What conclusion can you draw from these simulations?
+7.  Finally, try to set up a scenario where you combine both migration and mutation. Which forces have the strongest effect?
 <br />
 <br />
+
+
 
