@@ -471,9 +471,10 @@ PTC itself is not found in foods but is chemically similar to naturally occurrin
 <br />
 
 #### Exercise 15
-In the <tt>R</tt>-exercise we will investigate how population size can influence the fixation and extinction probabilities of individual alleles.
+In this <tt>R</tt>-exercise, we will investigate, how population size influence the fixation and extinction probabilities of individual alleles.
 
-The function below `sim` allow you to see how generation time, number of independent populations, and starting allele frequencies affect the probability to loose alleles.
+The function`sim` allow you to simulate `num_populations` with a population size given by `pop_size` (which can vary between the different populations) for `generations`. The starting allele frequency can be specified for each simulated population with `allele_freqs`.
+
 ```{r}
 # Function to simulate allele frequency across generations for multiple populations
 sim <- function(pop_size, generations, num_populations = 1, allele_freqs = 0.5) {
@@ -530,33 +531,32 @@ The function below allow us to run several simulations and collect the results.
 <br />
 <br />
 
-
+In the first example, we simulate 10 different populations, each consisting of 100 individuals, with an initial allele frequency of 0.5. We will run the simulation for 100 generations.
 ```{r}
 # Parameters
-  population_sizes <- c(10, 50, 100)
+  population_sizes <- 100
   generations <- 100
-  num_populations <- 1
-  initial_allele_freqs <- c(0.5,0.5, 0.5) 
+  num_populations <- 3
+  initial_allele_freqs <- rep(0.5,num_populations)
 
-  tmp <- run_sim(population_sizes=population_sizes, 
-                 generations=generations, 
-                 num_populations=num_populations, 
-                 initial_allele_freqs=initial_allele_freqs)
+  sim.res <- run_sim(population_sizes=population_sizes, 
+                     generations=generations, 
+                     num_populations=num_populations, 
+                     initial_allele_freqs=initial_allele_freqs)
 
 # Count how many populations that has been fixed  
-  tmp$fixed <- paste(tmp$population_size,":",tmp$population_num,sep="")
+  sim.res$fixed <- paste(sim.res$population_size,":",sim.res$population_num,sep="")
   is.fixed <- NULL
-  for(pop in unique(tmp$fixed)){
-    is.fixed <- c(is.fixed, any(tmp[tmp$fixed==pop,]$freq==0 | tmp[tmp$fixed==pop,]$freq==1))
+  for(pop in unique(sim.res$fixed)){
+    is.fixed <- c(is.fixed, any(sim.res[sim.res$fixed==pop,]$freq==0 | sim.res[sim.res$fixed==pop,]$freq==1))
   }
 ```
 <br />
 <br />
-Make a plot to visualise the results.
 ```{r, fig.align='center', fig.height=4,fig.width=5}
-  ggplot(tmp, aes(x = generation, y = freq, 
-                  group = interaction(population_size, population_num), 
-                  color = as.factor(fixed))) +
+  ggplot(sim.res, aes(x = generation, y = freq, 
+                      group = interaction(population_size, population_num), 
+                      color = as.factor(fixed))) +
     geom_line(alpha = 0.7) +
     labs(title = paste("Number of populations fixed:", sum(is.fixed)),
        x = "Generation",
@@ -569,6 +569,11 @@ Make a plot to visualise the results.
 ```
 <br />
 <br />
+
+1.  With you own words, describe what is happening in the figure above.
+2.  In the next simulation, change `population_sizes <- c(10,50,100)`. How does that affect the results?
+3.  How does varying the `initial_allele_freqs` affect the probability of fixation?
+
 
 **Allow migration**
 A fraction (migration_rate) of individuals in the population is replaced by migrants from an external source population.
