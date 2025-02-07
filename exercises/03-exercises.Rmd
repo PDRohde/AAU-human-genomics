@@ -1,0 +1,32 @@
+---
+title: "Human Genomics"
+subtitle: "Session 3: Estimating risk from pedegrees
+author:
+  - name: "Palle Duun Rohde"
+    url: https://pdrohde.github.io/
+    affiliation: Genomic Medicine, Aalborg University
+    email: palledr@hst.aau.dk
+output: html_document
+---
+<style type="text/css">
+
+body, td {
+   font-size: 14px;
+}
+code.r{
+  font-size: 12px;
+}
+pre {
+  font-size: 12px
+}
+</style>
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = "/Users/fs61oo/Documents/GitHub/AAU-human-genomics/")
+library(ggplot2)
+library(patchwork)
+set.seed(666)
+```
+
+### Part I
+#### Exercise 1
