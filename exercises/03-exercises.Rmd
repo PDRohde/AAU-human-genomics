@@ -1,6 +1,6 @@
 ---
 title: "Human Genomics"
-subtitle: "Session 3: Estimating risk from pedegrees
+subtitle: "Session 3: Estimating risk from pedegrees"
 author:
   - name: "Palle Duun Rohde"
     url: https://pdrohde.github.io/
