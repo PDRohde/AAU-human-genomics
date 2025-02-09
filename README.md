@@ -32,7 +32,7 @@ The course responsible is Palle Duun Rohde ([Email](mailto:palledr@hst.aau.dk?su
 
  **Session 3: Risk estimation from pedigrees** \
  [&nbsp; Lecture notes](lecture_notes/03-session_slides-github.pdf)  
- [&nbsp; Group work](exercises/)  
+ [&nbsp; Group work](exercises/JMD006000001.pdf)  
  [&nbsp; Exercises](exercises/03-exercises.html)  
 
  **Session 4: Complex traits and quantitative genetics** \
