@@ -28,7 +28,6 @@ library(patchwork)
 set.seed(666)
 ```
 
-### Part I
 #### Exercise 1
 For each pedigree, determine the most probable inheritance pattern, assuming monogenic inheritance and full penetrance.
 
@@ -148,6 +147,30 @@ A. Based on the available genotype data, can we determine which marker allele (A
 B. If we assume that II-1 has the genotype BB, does this allow us to conclusively determine which marker allele is linked to the disease allele?
 C. If the fetus IV-1 has inherited the disease allele, what genotype is expected at the marker locus?
 
+<br />
+<br />
+
+#### Exercise 7
+Assume an X-linked recessive monogenic disorder with full penetrance. 
+
+1.  Based on all the information in the pedigree below, what is the probability that II.3 is a carrier of the monogenic disease-causing allele? (Hint: Use Bayes theorem)
+
+<p align="center">
+<img src="./grx/exercise-03-e7.png" style="width:40%; height:auto;">
+</p>
+
+<br />
+<br />
+
+
+
+#### Exercise 8
+
+Among Danish women with breast cancer, 3% carry a pathogenic variant. Sanger sequencing detects pathogenic variants in _BRCA1_ and _BRCA2_ with 80% sensitivity.
+
+Lise, who is of Danish descent, underwent Sanger sequencing for _BRCA1_ and _BRCA2_, and no pathogenic variant was detected.
+
+1.  What is the probability that Lise is still a carrier of a pathogenic variant in _BRCA1_ and _BRCA2_ despite the negative test result?
 
 <br />
 <br />
