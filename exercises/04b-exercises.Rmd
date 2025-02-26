@@ -30,6 +30,26 @@ set.seed(666)
 
 #### Exercise 1
 
+A.  Discuss the similarities and differences between i) monogenic traits, ii) polygenic traits, and iii) multifactorial traits in terms of [but not exclusive to]:
+    -  Genetic architecture plot
+    -  Mendelian inheritance
+    -  Number of risk variants
+    -  Non-genetic influence
+    -  Example traits
+    -  Other
+
+<br />
+<br />
+
+#### Exercise 2
+
+Consider a multifactorial disease that occurs twice as frequently in males as in females. 
+
+A.  Draw a liability distribution curve for the population and indicate the respective thresholds for males and females.  
+B.  Identify which parental combination carries the highest risk of having affected children and briefly explain why:
+    -  Affected mother and healthy father. 
+    -  Affected father and healthy mother. 
+C.   Which offspring gender has the highest recurrence risk?
 
 <br />
 <br />
