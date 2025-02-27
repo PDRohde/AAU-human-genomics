@@ -36,7 +36,7 @@ The course responsible is Palle Duun Rohde ([Email](mailto:palledr@hst.aau.dk?su
  [&nbsp; Exercises](exercises/03-exercises.html)  
 
  **Session 4: Complex traits and quantitative genetics** \
-  [&nbsp; Lecture notes]()  
+  [&nbsp; Lecture notes](lecture_notes/04-session_slides-github.pdf)  
   [&nbsp; Exercises A](exercises/04a-exercises.html)  
   [&nbsp; Exercises B](exercises/04b-exercises.html)    
 
