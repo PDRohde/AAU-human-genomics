@@ -262,7 +262,7 @@ __Answer:__
 Make a plot of the genetic relationship matrix using the `corrplot` function from the corrplot R package:
 
 
-```{r, eval=TRUE, echo=T, message=FALSE, fig.height=5,fig.width=8,fig.align='center'}
+```{r, eval=TRUE, echo=T, message=FALSE, fig.height=7,fig.width=7,fig.align='center'}
 corrplot(A, method="color", bg="white", col= colorRampPalette(c("white", "#62AFD7FF", "#233253FF"))(10) ,
          tl.pos="n", outline=FALSE, xlab=FALSE, ylab=FALSE, is.corr=FALSE)
 
@@ -374,7 +374,7 @@ The fit object (i.e., output from the `greml` function) contains estimates of va
 
 Our main interest is the variance components $\sigma_a^2$ and $\sigma_e^2$ which are in the `fit$theta` slot of the fit. The following commands extract and makes a barplot of the estimates of the variance components:
 
-```{r, eval=TRUE, echo=TRUE}
+```{r, eval=TRUE, echo=TRUE, fig.align="center", fig.height=4,fig.width=4}
 fit$theta
 barplot(fit$theta)
 ```
@@ -447,7 +447,7 @@ Va/(Va+Ve)
 ## Practical 4: Estimation of additive genetic values
 
 ### Introduction 
-In this practical we will estimate additive genetic values for quantitative traits in the mouse population. We will be using the BLUP method. This method allow for estimation of breeding values using phenotypic information for individuals from a general pedigree. BLUP is based on linear mixed model methodology and estimates of additive genetic values can be obtained by solving the mixed model equations. The BLUP method also require a genetic relationship matrix and estimates of variance components (e.g., $\sigma_a^2$ and $\sigma_e^2$). These methods and algorithms are implemented in the R package `qgg` introduced previously.
+In this practical we will estimate additive genetic values for quantitative traits in the mouse population. We will be using the BLUP method. This method allow for estimation of additive genetic values using phenotypic information for individuals from a general pedigree. BLUP is based on linear mixed model methodology and estimates of additive genetic values can be obtained by solving the mixed model equations. The BLUP method also require a genetic relationship matrix and estimates of variance components (e.g., $\sigma_a^2$ and $\sigma_e^2$). These methods and algorithms are implemented in the R package `qgg` introduced previously.
 
 ### Load R packages that will be used in this practical
 Use the following code to load the qgg package:
@@ -580,14 +580,14 @@ fit <- greml(y=y,X=X, GRM=list(A=A))
 
 The fit object contains estimates of variance components, fixed and random effects, first and second derivatives of log-likelihood, and the asymptotic standard deviation of parameter estimates. Our main interest is the variance components $\sigma_a^2$ and $\sigma_e^2$ which are in the `fit$theta` slot of the fit. The following commands extract and makes a barplot of the estimates of the variance components:
 
-```{r, eval=TRUE, echo=TRUE, fig.height=4,fig.width=8,fig.align='center'}
+```{r, eval=TRUE, echo=TRUE, fig.height=4,fig.width=4,fig.align='center'}
 fit$theta
 Va <- fit$theta[1] # First element in theta is the additive genetic variance
 Ve <- fit$theta[2] # Second element in theta is the residual variance
 barplot(fit$theta)
 ```
 
-### Estimating breeding values for traits in the mouse data using BLUP 
+### Estimating additive genetic values for traits in the mouse data using BLUP 
 The goal of the BLUP analysis is the estimate the fixed ,$b$, and random genetic effects, $a$, in the linear mixed model specified above. This can be done using the `BLUE` and `BLUP´ equations shown below:
 
 The best linear unbiased prediction (BLUP) of $\hat{a}$ is:
@@ -659,3 +659,248 @@ cor(ahat,y)
 \hfill\break
 
 
+
+# Practical 5: Estimation of additive genomic values
+
+## Introduction 
+In this practical we will estimate the additive genomic values for quantitative traits in the mouse population. We will be using the GBLUP method. This method allow for estimation of additive genomic values using phenotypic and genotypic information for individuals from a general pedigree. GBLUP is based on linear mixed model methodology and estimates of additive genomic values can be obtained by solving the mixed model equations. The GBLUP method also require a genomic relationship matrix estimated from genetic marker data and estimates of variance components (e.g., $\sigma_a^2$ and $\sigma_e^2$). These methods are implemented in the R package `qgg` introduced previously.
+
+### Load R packages that will be used in this practical
+
+Use the following code to load the qgg package:
+
+```{r,  eval=TRUE, echo=TRUE}
+library(qgg) # R package used for REML/BLUP analysis
+```
+
+
+### Explore mouse pedigree data
+
+The mouse phenotype data,  pedigree and genotype data can be loaded using the following commands:
+```{r, echo=T}
+mouse <- readRDS(url("https://github.com/PDRohde/AAU-human-genomics/raw/main/exercises/mouseqtl.rds"))
+pedigree <- readRDS(url("https://github.com/PDRohde/AAU-human-genomics/raw/main/exercises/mousepedigree.rds"))
+genotypes <- readRDS(url("https://github.com/PDRohde/AAU-human-genomics/raw/main/exercises/mousegenotypes_imputed.rds"))
+```
+
+First let us have a quick look at the mouse genotype data. Use the `str` function to get a fast overview of the genotypes you are working with.
+
+```{r,  eval=FALSE, echo=FALSE}
+str(genotypes)
+```
+
+The genotypes for each marker are coded as 0,1 or 2 corresponding to the number of copies of the minor allele. The number of individuals and number of genetic markers in the data can be found using the following commands:
+
+```{r,  eval=TRUE, echo=TRUE}
+nrow(genotypes)
+dim(genotypes)
+```
+
+
+## Computing genomic relationship matrix using marker data
+The genomic relationship matrix $G$ is used for estimating additive genomic values. The matrix $G$ can be computed using genetic marker data. This is implemented in the function `grm` from the `qgg` package. Use the command below to compute the genomic relationship matrix for the mouse population:
+
+```{r, eval=TRUE, echo=TRUE}
+W <- scale(genotypes) # here we center and scale columns in genotypes (i.e., mean=0, sd=1)
+G <- grm(W=W) 
+```
+
+```{r, eval=FALSE, echo=FALSE}
+#p <- colSums(genotypes)/(nrow(genotypes)*2)
+W <- apply(genotypes,2,function(x) {
+ px <- sum(x)/(2*length(x)) # allelle frequency
+ if(px>0.5) px <- 1-px
+ x <- x - 2*px
+ x
+})
+G <- W%*%t(W)/sum(2*p*(1-p))
+```
+
+The dimension of the genomic relationship matrix can be determined using the following command: 
+
+```{r, eval=TRUE, echo=TRUE}
+dim(G)
+```
+
+The number of rows and columns should be equal to the number of individuals in the genotype matrix. 
+
+Make a plot of the genomic relationship matrix using the `corrplot` function from the corrplot R package:
+
+
+```{r, eval=TRUE, echo=T, message=FALSE, fig.height=7,fig.width=7,fig.align='center'}
+corrplot(G, method="color", bg="white", col= colorRampPalette(c("#B4362AFF", "#DA5A5AFF","white", "#62AFD7FF", "#233253FF"))(10) ,
+         tl.pos="n", outline=FALSE, xlab=FALSE, ylab=FALSE, is.corr=FALSE)
+```
+
+
+##### Question 1: Describe the plot you just made of the genomic relationship? 
+
+
+\hfill\break
+
+__Answer:__
+
+\hfill\break
+
+To better compare the pedigree based genetic relationship matrix $A$ and the genomic relationship matrix $G$ we can make a scatter plot of the values from the two matrices:
+
+```{r, fig.align='center', eval=TRUE, echo=TRUE, message=FALSE,fig.height=5,fig.width=5}
+A <- grm(pedigree=pedigree) 
+dim(A)
+plot(as.vector(A),as.vector(G))
+```
+
+##### Question 2: Are the two relationship matrices similar?
+
+
+\hfill\break
+
+__Answer:__
+
+\hfill\break
+### Specifying the linear mixed model for the mouse data:
+The next step is to prepare the linear mixed model for the mouse data. The linear mixed model contains the observation vector for the trait(s) of interest ($y$), the `fixed effects` that explain systematic differences in $y$, and the `random genetic effects` $a$ and random residual effects $e$.
+
+A matrix formulation of a general model equation is:
+\begin{align}
+y &= Xb + a + e \notag
+\end{align}
+
+where
+\begin{align}
+y &: \text{is the vector of observed values of the trait,} \notag \\
+b &: \text{is a vector of fixed effects,} \notag \\
+a &: \text{is a vector of random genetic effects,} \notag \\
+e &: \text{is a vector of random residual effects,} \notag \\
+X &: \text{is a known design matrix that relates the elements of b to their corresponding element in y.} \notag 
+\end{align}
+
+In the statistical model (specified above) the random effects ($a$ and $e$) and the phenotypes ($y$) are considered to be random variables which follow a multivariate normal distribution. In general terms the expectations of these random variables are:  
+\begin{align}
+a \sim MVN(0,G\sigma_a^2) \notag \\
+e \sim MVN(0,I\sigma_e^2) \notag \\
+y \sim MVN(Xb,V) \notag \\
+\end{align}
+where $G\sigma_a^2$, and $I\sigma_e^2$ are square matrices of genetic and residual (co)variances among the individuals, respectively, and $V=G\sigma_a^2+I\sigma_e^2$ is the overall phenotypic covariance matrix. 
+
+The main difference is that we use the genomic relationship matrix $G$ instead of the pedigree based genetic relationship matrix $A$.    
+ 
+In order to specify the linear mixed model we need to construct $y$ and $X$ from the mouse data. Let us just have a quick look at the mouse data again:
+
+```{r, eval=FALSE, echo=FALSE}
+str(mouse)
+```
+
+Here we will estimate additive genomic values for body weight. The vector of observed trait values for body weight can be extracted from the mouse data as follows:  
+
+```{r, eval=TRUE, echo=TRUE}
+y <- mouse[,"BW"]
+```
+
+To make the $X$ matrix we need to decide which variables we should include as fixed effects in the model. Here we use the variables sex and reps. The `model.matrix` function can be used to construct the $X$ matrix in the linear mixed model specified above:
+
+```{r, eval=TRUE, echo=TRUE}
+X <- model.matrix(BW ~ sex + reps, data=mouse)
+```
+
+
+### Estimating genetic parameters on the mouse data using REML
+The GBLUP analysis is based on estimates of the variance components (i.e. $\sigma_{a}^2$ and $\sigma_{e}^2$). The variance components are estimated using REML method. The input required the vector of observed values of the trait ($y$), the design matrix for the fixed effects ($X$), and the genetic relationship matrix ($A$).  
+
+The genetic relationship matrix $A$ include relationships for all individuals in the pedigree. However only a subset of the individuals have phenotypes recorded for body weight. Therefore we need to subset the $A$ matrix. The REML analysis is done using the following command:
+
+```{r, eval=TRUE, echo=TRUE}
+ids <- rownames(X)
+fit <- greml(y=y,X=X, GRM=list(A=A[ids,ids]))
+```
+
+The fit object contains estimates of variance components $\sigma_a^2$ and $\sigma_e^2$ which are in the `fit$theta` slot of the fit:
+
+```{r, eval=TRUE, echo=TRUE}
+fit$theta
+Va <- fit$theta[1] # First element in theta is the additive genetic variance
+Ve <- fit$theta[2] # Second element in theta is the residual variance
+```
+
+
+### Estimating additive genomic values for traits in the mouse data using GBLUP: 
+The goal of the GBLUP analysis is the estimate the fixed ,$b$, and random genetic effects, $a$, in the linear mixed model specified above. This can be done using the `BLUE` and `BLUP´ equations as shown previously. The best linear unbiased prediction (BLUP) of $\hat{a}$ is:
+
+\begin{equation}
+\hat{a} = G\sigma_a^2V^{-1}(y - X\hat{b})
+\end{equation}
+
+The best linear unbiased estimator (BLUE) of $\hat{b}$ is:
+
+\begin{equation}
+\hat{b} = (X'V^{-1} X)^{-1} X' V^{-1} y
+\end{equation}.  
+
+We have allready determined $y$ and $X$ and therefore just need to construct the phenotypic covariance matrix $V$ (and it's inverse). This can be done using the following lines of R code:    
+
+```{r, eval=TRUE, echo=TRUE}
+ids <- rownames(X) # Individuals with phenotypes
+n <- nrow(X)       # Number of individuals in the data set
+I <- diag(1,n)     # Identity matrix for residual effects  
+V <-  G[ids,ids]*Va + I*Ve  # Phenotypic variance covariance matrix
+Vi <- solve(V)     # Inverse of phenotypic covariance matrix
+```
+
+The solution to the fixed effects, $b$, can be found using the following R command:
+
+```{r, eval=TRUE, echo=TRUE}
+bhat <- solve(t(X) %*% Vi %*% X)%*%t(X) %*% Vi %*% y
+bhat
+```
+
+The solution to the random genetic effects, $a$, can be found using the following R command:
+
+```{r, eval=TRUE, echo=TRUE}
+ahat_G <- (G[,ids]*Va)%*% Vi %*% (y-X%*%bhat)  # Genomic based BLUP
+```
+
+
+```{r, eval=TRUE, echo=TRUE}
+V <-  A[ids,ids]*Va + I*Ve  # Phenotypic variance covariance matrix
+Vi <- solve(V)     # Inverse of phenotypic covariance matrix
+bhat <- solve(t(X) %*% Vi %*% X)%*%t(X) %*% Vi %*% y
+ahat_A <- (A[,ids]*Va)%*% Vi %*% (y-X%*%bhat)  # Genomic based BLUP
+
+```
+
+##### Question 3: Make histogram for the estimated additive genomic values. What do you think about their distribution?
+
+
+\hfill\break
+
+__Answer:__
+
+\hfill\break
+
+
+```{r, fig.align='center', eval=TRUE, echo=TRUE, fig.height=4, fig.width=8}
+layout(matrix(1:2,ncol=2))
+hist(ahat_A)
+hist(ahat_G)
+```
+
+\hfill\break
+
+
+We want to compare the additive genomic values estimated using pedigree and genomic information. This can be done by computing the correlation or by making a scatter plot for the additive genetic/genomic values obtained using pedigree or genetic marker information. 
+
+
+##### Question 4: Make a scatter plot and compute correlation for the estimated additive genetic values and additive genomic values. What do you think about their relationship?
+
+
+\hfill\break
+
+__Answer:__
+
+\hfill\break
+
+
+```{r, fig.align='center', eval=TRUE, echo=TRUE, fig.height=5,fig.width=5}
+plot(ahat_G,ahat_A)
+cor(ahat_G,ahat_A)
+```
