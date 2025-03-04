@@ -89,8 +89,573 @@ The mouse pedigree is loaded in a similar way using the following command:
 pedigree <- readRDS(url("https://github.com/PDRohde/AAU-human-genomics/raw/main/exercises/mousepedigree.rds"))
 ```
 
+##### Question 1: Which variables do we have in the pedigree?
+
+Use the `str` function to get a fast overview of the pedigree you are working.
+
+\hfill\break
+
+__Answer:__
+
+```{r,  eval=TRUE, echo=TRUE}
+str(pedigree)
+```
+
+\hfill\break
 
 
+##### Question 2: How many individuals do we have in the pedigree?
 
+
+\hfill\break
+
+__Answer:__
+
+```{r,  eval=TRUE, echo=TRUE}
+nrow(pedigree)
+dim(pedigree)
+```
+
+
+##### Question 3: How many generations and number of mice in each generation do we have in the pedigree?
+
+Use the `table` function on the generation variable.
+
+\hfill\break
+
+__Answer:__
+
+```{r,  eval=TRUE, echo=TRUE}
+table(pedigree$generation)
+```
+
+\hfill\break
+
+### Computing genetic relationship matrix for the mouse pedigree: 
+The REML analysis require us to calculate the genetic relationship matrix $A$. This is done using information about the id, mother, and father which is available in our pedigree data file. 
+
+To illustrate this step we will first calculate it for a small part of the mouse pedigree. 
+We are given the following pedigree and we want to compute the matrix $A$.
+
+```{r,  eval=TRUE, echo=TRUE}
+family <- c(13,14,84,1244,1248)
+pedigree[family,]
+```
+
+The additive genetic relationship ($A_{ij}$) between the various sources (j) and the individual itself, i.e. the candidate to be evaluated (i), can be seen in the table below.
+
+<style type="text/css">
+.tg  {border-collapse:collapse;border-color:#ccc;border-spacing:0;}
+.tg td{background-color:#fff;border-color:#ccc;border-style:solid;border-width:1px;color:#333;
+  font-family:Arial, sans-serif;font-size:12px;overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg th{background-color:#f0f0f0;border-color:#ccc;border-style:solid;border-width:1px;color:#333;
+  font-family:Arial, sans-serif;font-size:12px;font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg .tg-0lax{text-align:left;vertical-align:top}
+</style>
+<table class="tg"><thead>
+  <tr>
+    <th class="tg-0lax">Relative</th>
+    <th class="tg-0lax">$A_{i,j}$</th>
+  </tr></thead>
+<tbody>
+  <tr>
+    <td class="tg-0lax">Self</td>
+    <td class="tg-0lax">1.0</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">Unrelated</td>
+    <td class="tg-0lax">0</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">Mother</td>
+    <td class="tg-0lax">0.5</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">Father</td>
+    <td class="tg-0lax">0.5</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">Grandparent</td>
+    <td class="tg-0lax">0.25</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">Half-sib</td>
+    <td class="tg-0lax">0.25</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">Full-sib</td>
+    <td class="tg-0lax">0.5</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">Progeny</td>
+    <td class="tg-0lax">0.5</td>
+  </tr>
+</tbody>
+</table>
+
+\hfill\break
+
+
+Next we will compute the genetic relationship matrix for the entire mouse pedigree. The matrix $A$ can be computed using a recursive algorithm implemented in the function `grm` from the qgg package. Use the command below to compute the genetic relationship matrix for the mouse pedigree:
+
+```{r, eval=TRUE, echo=TRUE}
+A <- grm(pedigree=pedigree) 
+```
+
+##### Question 4: What is the dimension of the genetic relationship matrix? 
+
+\hfill\break
+
+__Answer:__
+
+```{r, eval=TRUE, echo=TRUE}
+dim(A)
+```
+
+\hfill\break
+
+The number of rows and columns should be equal to the number of individuals in the pedigree. Check the first 5 individuals in the matrix using the following command:
+
+```{r, eval=TRUE, echo=TRUE}
+A[1:5,1:5]
+```
+
+##### Question 5: Are these individuals related? 
+
+\hfill\break
+
+__Answer:__
+
+\hfill\break
+
+To further explore the genetic relationship we compute the mean of diagonal elements of $A$ using the following command: 
+
+```{r, eval=TRUE, echo=TRUE}
+mean(diag(A))
+```
+
+##### Question 6: How should we interpret this value? 
+
+\hfill\break
+
+__Answer:__
+
+\hfill\break
+
+Previously we have determined the genetic relationship matrix for a small part of the mouse pedigree. We can extract the corresponding elements from the $A$ matrix for the entire mouse pedigree using the following command:
+
+```{r, eval=TRUE, echo=TRUE}
+ids <- c(13,14,84,1244,1248)
+A[ids,ids]
+```
+
+##### Question 6: Are the values in this part of the genetic relationship matrix the same as you have found using the "manual" approach? 
+
+
+\hfill\break
+
+__Answer:__
+
+
+\hfill\break
+
+Make a plot of the genetic relationship matrix using the `corrplot` function from the corrplot R package:
+
+
+```{r, eval=TRUE, echo=T, message=FALSE, fig.height=5,fig.width=8,fig.align='center'}
+corrplot(A, method="color", bg="white", col= colorRampPalette(c("white", "#62AFD7FF", "#233253FF"))(10) ,
+         tl.pos="n", outline=FALSE, xlab=FALSE, ylab=FALSE, is.corr=FALSE)
+
+```
+
+##### Question 7: Describe the plot you just made of the genetic relationship? 
+
+
+\hfill\break
+
+__Answer:__
+
+\hfill\break
+
+### Specifying the linear mixed model for the mouse data:
+The next step is to prepare the linear mixed model for the mouse data. Recall that the linear mixed model contains the observation vector for the trait(s) of interest ($y$), the `fixed effects` that explain systematic differences in $y$, and the `random genetic effects` $a$ and random residual effects $e$.
+
+A matrix formulation of a general model equation is:
+\begin{align}
+y &= Xb + a + e \notag
+\end{align}
+
+where
+\begin{align}
+y &: \text{is the vector of observed values of the trait,} \notag \\
+b &: \text{is a vector of fixed effects,} \notag \\
+a &: \text{is a vector of random genetic effects,} \notag \\
+e &: \text{is a vector of random residual effects,} \notag \\
+X &: \text{is a known design matrix that relates the elements of b to their corresponding element in y.} \notag 
+\end{align}
+
+In the statistical model (specified above) the random effects ($a$ and $e$) and the phenotypes ($y$) are considered to be random variables which follow a multivariate normal distribution: In general terms the expectations of these random variables are:  
+\begin{align}
+E(y) &= Xb \notag \\
+E(a) &= 0 \notag \\
+E(e) &= 0 \notag \\
+\end{align}
+and the variance-covariance matrices are:
+\begin{align}
+ Var(a) &= A\sigma_a^2 \notag \\
+ Var(e) &= I\sigma_e^2 \notag \\
+ Var(y) &= A\sigma_a^2 + I\sigma_e^2 \notag
+\end{align}
+ 
+where $A\sigma_a^2$, and $I\sigma_e^2$ are square matrices of genetic and residual (co)variances among the individuals, respectively. In the previous section we have allready constructed the genetic relationship matrix $A$. 
+
+In order to perform the REML analysis we need to construct $y$ and $X$ from the mouse data. Let us just have a quick look at the mouse data again:
+
+```{r, eval=TRUE, echo=TRUE}
+str(mouse)
+```
+
+Here we will estimate the heritability for body weight. The vector of observed trait values for body weight can be extracted from the mouse data as follows:  
+
+```{r, eval=TRUE, echo=TRUE}
+y <- mouse[,"BW"]
+```
+
+Let us explore the trait values using the `head`, `tail` and `summary` functions:
+
+```{r, eval=TRUE, echo=TRUE}
+head(y)
+tail(y)
+summary(y)
+```
+
+To make the $X$ matrix we need to decide which variables we should include as fixed effects in the model. We have sex, reps, sire, dam, M227 and M1139 in the mouse data frame. 
+
+
+##### Question 8: Which variables should we include as fixed effects in the model? 
+
+
+\hfill\break
+
+__Answer:__
+
+\hfill\break
+
+The `model.matrix` function can be used to construct the $X$ matrix in the linear mixed model specified above:
+
+```{r, eval=TRUE, echo=TRUE}
+X <- model.matrix(BW ~ sex + reps, data=mouse)
+```
+
+We can use the `head` and `tail` functions to look at the $X$ matrix:
+
+```{r, eval=TRUE, echo=TRUE}
+head(X)
+tail(X)
+```
+
+### Estimating genetic parameters on the mouse data using REML
+The goal of the REML analysis to estimate the parameters (i.e. variance components $\sigma_{a}^2$ and $\sigma_{e}^2$) in the linear mixed model specified above. In this analysis we find the set of parameters which maximizes the __likelihood__ of the data, i.e., the probability of observations given the model and its parameter estimates: $p(y|\hat{b}, \hat{\sigma}^2_{a}, \hat{\sigma}^2_{e})$. 
+
+The input required the vector of observed values of the trait ($y$), the deisgn matrix for the fixed effects ($X$), and the genetic relationship matrix ($A$). The $A$ matrix calculated previously include genetic relationships for all individuals in the pedigree. However only a subset of the inviduals have phenotypes recorded for body weight. Therefore we need to subset the $A$ matrix as shown in the R code below:
+
+```{r, eval=TRUE, echo=TRUE}
+ids <- rownames(X)
+A <- A[ids,ids]
+```
+
+The REML method is implemented in the `greml` function from the “qgg” package. The REML analysis is done using the following command:
+
+```{r, eval=TRUE, echo=TRUE}
+fit <- greml(y=y,X=X, GRM=list(A=A))
+```
+
+The fit object (i.e., output from the `greml` function) contains estimates of variance components, fixed and random effects, first and second derivatives of log-likelihood, and the asymptotic standard deviation of parameter estimates. 
+
+Our main interest is the variance components $\sigma_a^2$ and $\sigma_e^2$ which are in the `fit$theta` slot of the fit. The following commands extract and makes a barplot of the estimates of the variance components:
+
+```{r, eval=TRUE, echo=TRUE}
+fit$theta
+barplot(fit$theta)
+```
+
+The first element in the `theta` vector is the estimate of the additive genetic variance ($\hat{\sigma}^2_{a}$) and the second element is the estimate of the residual variance ($\hat{\sigma}^2_{e}$). 
+
+```{r, eval=TRUE, echo=TRUE}
+Va <- fit$theta[1]
+Ve <- fit$theta[2]
+Va
+Ve
+```
+
+From the REML estimate of the variance components, the heritability can easily be computed by: 
+\begin{align}
+h^2 &= \sigma^2_{a}/(\sigma^2_a+\sigma^2_e)
+\end{align}
+
+
+##### Question 9: What is the heritability for body weight? 
+
+
+\hfill\break
+
+__Answer:__
+
+\hfill\break
+
+```{r, eval=TRUE, echo=TRUE}
+Va/(Va+Ve)
+```
+
+In the experiment the mice were feed ad libitum. Now we want to perform a simlar experiment where mice are reared under restricted feed intake, We will record phenotypes for body weight and blood glucose levels and use mice from the same F2 population. 
+
+##### Question 10: Should we re-estimate the heritability? 
+
+
+\hfill\break
+
+__Answer:__
+
+\hfill\break
+
+
+##### Question 11: What is the heritability for glucose levels in the blood? 
+
+
+\hfill\break
+
+__Answer:__
+
+\hfill\break
+
+
+```{r, eval=TRUE, echo=TRUE}
+y <- mouse[,"Gl"]
+X <- model.matrix(Gl ~ sex + reps, data=mouse)
+ids <- rownames(X)
+A <- grm(pedigree=pedigree) 
+A <- A[ids,ids]
+fit <- greml(y=y,X=X, GRM=list(A=A))
+Va <- fit$theta[1]
+Ve <- fit$theta[2]
+Va/(Va+Ve)
+```
+
+
+\newpage
+
+## Practical 4: Estimation of additive genetic values
+
+### Introduction 
+In this practical we will estimate additive genetic values for quantitative traits in the mouse population. We will be using the BLUP method. This method allow for estimation of breeding values using phenotypic information for individuals from a general pedigree. BLUP is based on linear mixed model methodology and estimates of additive genetic values can be obtained by solving the mixed model equations. The BLUP method also require a genetic relationship matrix and estimates of variance components (e.g., $\sigma_a^2$ and $\sigma_e^2$). These methods and algorithms are implemented in the R package `qgg` introduced previously.
+
+### Load R packages that will be used in this practical
+Use the following code to load the qgg package:
+
+```{r,  eval=TRUE, echo=TRUE}
+library(qgg) # R package used for REML/BLUP analysis
+```
+
+### Explore mouse pedigree data
+
+The mouse data and pedigree set can be loaded using the following commands:
+```{r, echo=T}
+mouse <- readRDS(url("https://github.com/PDRohde/AAU-human-genomics/raw/main/exercises/mouseqtl.rds"))
+pedigree <- readRDS(url("https://github.com/PDRohde/AAU-human-genomics/raw/main/exercises/mousepedigree.rds"))
+
+```
+
+First let us have a quick look at the mouse data again. Use the `str` function to get a fast overview of the pedigree you are working.
+
+```{r,  eval=TRUE, echo=TRUE}
+str(pedigree)
+```
+
+The number of individuals and generations in the pedigree can be found using the following commands:
+
+```{r,  eval=TRUE, echo=TRUE}
+nrow(pedigree)
+dim(pedigree)
+table(pedigree$generation)
+```
+
+### Computing genetic relationship matrix for the mouse pedigree
+The genetic relationship matrix $A$ is used for estimating additive genetic values. The matrix $A$ can be computed using the recursive algorithm implemented in the function `grm` from the qgg package. Use the command below to compute the genetic relationship matrix for the mouse pedigree:
+
+```{r, eval=TRUE, echo=TRUE}
+A <- grm(pedigree=pedigree) 
+```
+
+The dimension of the genetic relationship matrix can be determined using the following command: 
+
+```{r, eval=TRUE, echo=TRUE}
+dim(A)
+```
+
+The number of rows and columns should be equal to the number of individuals in the pedigree. 
+
+### Specifying the linear mixed model for the mouse data
+The next step is to prepare the linear mixed model for the mouse data. Recall that the linear mixed model contains the observation vector for the trait(s) of interest ($y$), the `fixed effects` that explain systematic differences in $y$, and the `random genetic effects` $a$ and random residual effects $e$.
+
+A matrix formulation of a general model equation is:
+\begin{align}
+y &= Xb + a + e \notag
+\end{align}
+
+where
+\begin{align}
+y &: \text{is the vector of observed values of the trait,} \notag \\
+b &: \text{is a vector of fixed effects,} \notag \\
+a &: \text{is a vector of random genetic effects,} \notag \\
+e &: \text{is a vector of random residual effects,} \notag \\
+X &: \text{is a known design matrix that relates the elements of b to their corresponding element in y.} \notag 
+\end{align}
+
+In the statistical model (specified above) the random effects ($a$ and $e$) and the phenotypes ($y$) are considered to be random variables which follow a multivariate normal distribution. In general terms the expectations of these random variables are:  
+\begin{align}
+a \sim MVN(0,A\sigma_a^2) \notag \\
+e \sim MVN(0,I\sigma_e^2) \notag \\
+y \sim MVN(Xb,V) \notag \\
+\end{align}
+where $A\sigma_a^2$, and $I\sigma_e^2$ are square matrices of genetic and residual (co)variances among the individuals, respectively, and $V=A\sigma_a^2+I\sigma_e^2$ is the overall phenotypic covariance matrix. In the previous section we have already constructed the genetic relationship matrix $A$. 
+
+In order to specify the linear mixed model we need to construct $y$ and $X$ from the mouse data. Let us just have a quick look at the mouse data again:
+
+```{r, eval=TRUE, echo=TRUE}
+str(mouse)
+```
+
+Here we will estimate additive genetic values for body weight. The vector of observed trait values for body weight can be extracted from the mouse data as follows:  
+
+```{r, eval=TRUE, echo=TRUE}
+y <- mouse[,"BW"]
+```
+
+Let us explore the trait values using the `head`, `tail` and `summary` functions:
+
+```{r, eval=TRUE, echo=TRUE}
+head(y)
+tail(y)
+summary(y)
+```
+
+To make the $X$ matrix we need to decide which variables we should include as fixed effects in the model. Here we use the variables sex and reps. The `model.matrix` function can be used to construct the $X$ matrix in the linear mixed model specified above:
+
+```{r, eval=TRUE, echo=TRUE}
+X <- model.matrix(BW ~ sex + reps, data=mouse)
+```
+
+We can use the `head` and `tail` functions to look at the $X$ matrix:
+
+```{r, eval=TRUE, echo=TRUE}
+head(X)
+tail(X)
+```
+
+##### Question 1: Why do we not include the effect of sire and dam in the model? 
+
+
+\hfill\break
+
+__Answer:__
+
+\hfill\break
+
+
+### Estimating genetic parameters on the mouse data using REML 
+The BLUP analysis is based on estimates of the variance components (i.e. $\sigma_{a}^2$ and $\sigma_{e}^2$). The variance components are estimated using REML method. The input required the vector of observed values of the trait ($y$), the design matrix for the fixed effects ($X$), and the genetic relationship matrix ($A$). 
+
+The genetic relationship matrix $A$ include relationships for all individuals in the pedigree. However only a subset of the individuals have phenotypes recorded for body weight and glucose levels in blood. Therefore we need to subset the $A$ matrix:
+
+```{r, eval=TRUE, echo=TRUE}
+ids <- rownames(X)
+A <- A[ids,ids]
+```
+
+The REML analysis is done using the following command:
+
+```{r, eval=TRUE, echo=TRUE}
+fit <- greml(y=y,X=X, GRM=list(A=A))
+```
+
+The fit object contains estimates of variance components, fixed and random effects, first and second derivatives of log-likelihood, and the asymptotic standard deviation of parameter estimates. Our main interest is the variance components $\sigma_a^2$ and $\sigma_e^2$ which are in the `fit$theta` slot of the fit. The following commands extract and makes a barplot of the estimates of the variance components:
+
+```{r, eval=TRUE, echo=TRUE, fig.height=4,fig.width=8,fig.align='center'}
+fit$theta
+Va <- fit$theta[1] # First element in theta is the additive genetic variance
+Ve <- fit$theta[2] # Second element in theta is the residual variance
+barplot(fit$theta)
+```
+
+### Estimating breeding values for traits in the mouse data using BLUP 
+The goal of the BLUP analysis is the estimate the fixed ,$b$, and random genetic effects, $a$, in the linear mixed model specified above. This can be done using the `BLUE` and `BLUP´ equations shown below:
+
+The best linear unbiased prediction (BLUP) of $\hat{a}$ is:
+
+\begin{equation}
+\hat{a} = A\sigma_a^2V^{-1}(y - X\hat{b})
+\end{equation}
+
+The best linear unbiased estimator (BLUE) of $\hat{b}$ is:
+
+\begin{equation}
+\hat{b} = (X'V^{-1} X)^{-1} X' V^{-1} y
+\end{equation}
+
+The matrix $(X' V^{-1} X)^{-1}$ denotes the inverse of the matrix $(X' V^{-1} X)$.  
+
+We have already determined $y$ and $X$ and therefore just need to construct the phenotypic covariance matrix $V$ (and it's inverse). This can be done using the following lines of R code:    
+
+```{r, eval=TRUE, echo=TRUE}
+n <- nrow(X)       # Number of individuals in the data set
+I <- diag(1,n)     # Identity matrix for residual effects  
+V <-  A*Va + I*Ve  # Phenotypic variance covariance matrix
+Vi <- solve(V)     # Inverse of phenotypic covariance matrix
+```
+
+The solution to the fixed effects, $b$, can be found using the following R command:
+
+```{r, eval=TRUE, echo=TRUE}
+bhat <- solve(t(X) %*% Vi %*% X)%*%t(X) %*% Vi %*% y
+bhat
+```
+
+The solution to the random genetic effects, $a$, can be found using the following R command:
+
+```{r, eval=TRUE, echo=TRUE}
+ahat <- (A*Va)%*% Vi %*% (y-X%*%bhat)
+head(ahat)
+tail(ahat)
+```
+
+
+##### Question 2: Make histogram for $ and the estimated additive genetic values. What do you think about their distribution?
+
+\hfill\break
+
+__Answer:__
+
+```{r, fig.align='center', eval=TRUE, echo=TRUE, fig.height=4,fig.width=8}
+layout(matrix(1:2,ncol=2))
+hist(y)
+hist(ahat)
+```
+
+\hfill\break
+
+
+##### Question 3: Make a scatter plot of y and the estimated additive genetic values. What do you think about their relationship?
+
+
+\hfill\break
+
+__Answer:__
+
+```{r, fig.align='center', eval=TRUE, echo=TRUE, fig.height=5,fig.width=5}
+plot(ahat,y)
+cor(ahat,y)
+```
+
+\hfill\break
 
 
