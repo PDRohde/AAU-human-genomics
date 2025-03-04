@@ -1,0 +1,585 @@
+---
+title: "Human Genomics"
+subtitle: "Session 4c: Complex traits and and quantitative genetics"
+author:
+  - name: "Palle Duun Rohde & Peter Sørensen"
+    url: https://pdrohde.github.io/
+    affiliation: Genomic Medicine, Aalborg University
+    email: palledr@hst.aau.dk
+output: html_document
+---
+<style type="text/css">
+
+body, td {
+   font-size: 14px;
+}
+code.r{
+  font-size: 12px;
+}
+pre {
+  font-size: 12px
+}
+</style>
+---
+
+```{r setup, include=FALSE} 
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = "/Users/fs61oo/Documents/GitHub/AAU-human-genomics/")
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+```
+
+## Introduction
+In these practical sessions, we will analyze quantitative traits in a mouse population. The dataset includes phenotypic measurements related to growth and obesity, such as body weight and blood glucose levels, along with genetic marker data.
+
+The __M16 mouse__ was developed as an outbred model for early-onset polygenic obesity and diabesity. This was achieved through 27 generations of selective breeding for weight gain between 3 and 6 weeks of age, starting from an outbred ICR base population. The breeding strategy involved selecting the male and female with the highest weight gain within each litter. A parallel ICR control line was maintained through random mating while preserving a similar effective population size. Compared to ICR mice, M16 mice are consistently larger at all ages and exhibit increased body fat percentage, fat cell size and number, as well as larger organ weights. They also display hyperphagia, moderate obesity, and metabolic abnormalities, including hyperglycemia, hyperinsulinemia, and hypercholesterolemia.
+
+The __ICR mouse__ is an albino strain originally derived from SWISS mice and selectively bred by Dr. Hauschka to establish a highly fertile line. Named after the Institute of Cancer Research (ICR) in the USA, where it was developed, this strain has been widely distributed for research. ICR mice are relatively large, docile, and grow well, making them a widely used general-purpose model in various research fields, including toxicity studies, pharmacology, drug efficacy, and immunology.
+
+A large __F2 population__ (n=1181) was established by crossing the M16 and ICR lines. Twelve F1 families resulted from six pair matings of M16 males x ICR females and six pair matings of the reciprocal cross. A total of 55 F1 dams were mated to 11 F1 sires in sets of five F1 full sisters mated to the same F1 sire. These same specific matings were repeated in three consecutive replicates. Thus, the F2 population consisted of 55 full-sib families of up to 24 individuals each and 11 sire families families of up to 120 individuals each. Actual numbers of mice within families varied slightly due to a small number of failed pregnancies. All litters were standardized at birth to eight pups, with approximately equal representation of males and females.
+
+More information about the mouse data can be found in the following publications:
+
+Allan, M.F., Eisen, E.J. and Pomp, D. (2004). The M16 Mouse: An Outbred Animal Model of Early Onset Polygenic Obesity and Diabesity. Obesity Research, 12: 1397-1407. https://doi.org/10.1038/oby.2004.176
+
+Allan, M. F., Eisen E. J and Pomp, D. (2005). Genomic Mapping of Direct and Correlated Responses to Long-Term Selection for Rapid Growth Rate in Mice. Genetics, 170(4): 1863–1877. https://doi.org/10.1534/genetics.105.041319
+
+<br />
+<br />
+
+
+## Practical 1: Use R for Analysing Quantitative Traits 
+
+### Introduction 
+In this practical, we will use R to perform exploratory data analysis on two quantitative traits—body weight and blood glucose levels—measured in an F2 mouse population. This analysis includes calculating basic descriptive statistics, such as mean and variance, to summarize each trait. To assess the distribution of phenotypes, we will visualize the data using histograms and examine whether they follow a normal distribution. Boxplots will be used to identify potential effects of explanatory variables, while correlations and linear regression will help characterize relationships between traits and variables.
+
+One of the first steps in the analysis is to explore the dataset to gain a clear understanding of its structure. This includes examining the variables, the total number of records, the presence of missing values, the variable types, and the relationships between them. Several commands/functions will be used. To read more about a specific function (e.g., `str`) write `?str`. 
+
+The mouse data set can be loaded using the following command:
+```{r, echo=T}
+mouse <- readRDS(url("https://github.com/PDRohde/AAU-human-genomics/raw/main/exercises/mouse.rds"))
+
+```
+
+##### Question 1: How many observations and which variables do we have in the data set?
+
+To get a fast overview of the data set you are working with you can use the `str` function:
+
+\hfill\break
+
+__Answer:__
+
+\hfill\break
+
+
+
+```{r,  eval=TRUE, echo=TRUE}
+str(mouse)
+```
+
+
+The two quantitative traits we will be analysing are glucose levels in the blood (Gl) and body weight (BW) measured in the mice at 8 weeks of age. A more detailed view of the two quantitative traits in the `data.frame` is provided by the `summary` function:
+```{r, echo=T}
+summary(mouse[,5:6])
+```
+
+##### Question 2: What is the mean and variance of body weight and blood glucose levels?
+
+Use the `mean` and `var` functions to compute the mean and variance two traits:
+
+
+\hfill\break
+
+__Answer:__
+
+\hfill\break
+
+
+```{r, eval=TRUE, echo=TRUE}
+weight <- mouse[,"BW"]
+glucose <- mouse[,"Gl"]
+mean(weight)
+mean(glucose)
+var(weight) 
+var(glucose) 
+```
+
+##### Question 3: How are the phenotypes of weight and glucose distributed?
+
+Use the `histogram` and `boxplot` functions to visualize the distribution the two traits:
+
+
+\hfill\break
+
+__Answer:__
+
+\hfill\break
+
+
+```{r, fig.align='center', eval=TRUE, echo=TRUE, fig.height=6,fig.width=8}
+layout(matrix(1:4,ncol=2,byrow=TRUE))
+hist(weight)
+hist(glucose)
+boxplot(weight, main="weight", las=1,cex.axis = .8)
+boxplot(glucose, main="glucose", las=1,cex.axis = .8)
+```
+
+##### Question 4: Are the phenotypes of weight and glucose normally distributed?
+
+Use the `qqnorm` function to create a quantile-quantile (QQ) plot of the trait values. Use the qqline function to add a line to a “theoretical”, by default normal, quantile-quantile plot:
+
+
+\hfill\break
+
+__Answer:__
+
+\hfill\break
+
+
+```{r, eval=TRUE, echo=TRUE, fig.height=5,fig.width=8,fig.align='center'}
+layout(matrix(1:2,ncol=2))
+qqnorm(weight, las=1,cex.axis = .8)
+qqline(weight)
+qqnorm(glucose, las=1,cex.axis = .8)
+qqline(glucose)
+```
+
+##### Question 5: Is there a relationship between the phenotypes of weight and glucose?
+
+Make a scatter plot of the the 2 traits using the `plot` function. Compute the correlation using the `cor` function and perform a statistical test to assess the significance of correlation between values of weight and glucose using the `cor.test` function:
+
+
+\hfill\break
+
+__Answer:__
+
+\hfill\break
+
+
+```{r, eval=TRUE, echo=TRUE, fig.height=5,fig.width=5,fig.align='center'}
+plot(weight,glucose, las=1,cex.axis = .8)
+abline(lm(glucose~weight),lty=2,lwd=2,col="darkorange")
+cor(weight,glucose)
+cor.test(weight,glucose)
+```
+
+Let us explore the family structure. Use the `table` function to determine the family size for sires and dams: 
+
+```{r, eval=TRUE, echo=TRUE}
+table(mouse$sire)
+table(mouse$dam)
+```
+
+##### Question 6: What are the min and max family size?
+
+Use the `table` and `min` or `max` functions to determine the min/max family size for sires and dams:
+
+
+\hfill\break
+
+__Answer:__
+
+\hfill\break
+
+
+```{r, eval=TRUE, echo=TRUE}
+min(table(mouse$sire))
+max(table(mouse$sire))
+min(table(mouse$dam))
+max(table(mouse$dam))
+```
+
+##### Question 7: Does family influence the traits?
+
+Use the `boxplot` function to visualize the potential effect of family on the two traits:
+
+
+\hfill\break
+
+__Answer:__
+
+\hfill\break
+
+
+```{r, fig.align='center', eval=TRUE, echo=TRUE, fig.height=5,fig.width=8,fig.align='center'}
+layout(matrix(1:2,ncol=2))
+boxplot(mouse$BW~mouse$sire, main="Paternal families", ylab="BW", xlab="Sire", las=1,cex.axis = .8)
+boxplot(mouse$BW~mouse$dam, main="Maternal families", ylab="BW", xlab="Dam", las=1,cex.axis = .8)
+```
+
+##### Question 8: How many males and females?
+
+
+\hfill\break
+
+__Answer:__
+
+\hfill\break
+
+
+```{r, eval=TRUE, echo=TRUE}
+table(mouse$sex)
+```
+
+##### Question 9: Does gender influence the traits?
+
+Use the `boxplot` function to visualize the potential effect of gender on the two traits:
+
+
+\hfill\break
+
+__Answer:__
+
+\hfill\break
+
+
+```{r, fig.align='center', eval=TRUE, echo=TRUE, fig.height=5,fig.width=8,fig.align='center'}
+layout(matrix(1:2,ncol=2))
+boxplot(BW~sex, main="Body Weight", data=mouse, las=1,cex.axis = .8)
+boxplot(Gl~sex, main="Glucose", data=mouse, las=1,cex.axis = .8)
+```
+
+##### Question 10: How many observations in each replicate?
+
+
+\hfill\break
+
+__Answer:__
+
+\hfill\break
+
+
+```{r, eval=TRUE, echo=TRUE}
+table(mouse$reps)
+```
+
+##### Question 11: Does replicate influence the phenotype of weight and glucose?
+
+Use the `boxplot` function to visualize the potential effect of replicate on the two traits:
+
+
+\hfill\break
+
+__Answer:__
+
+\hfill\break
+
+
+```{r, fig.align='center', eval=TRUE, echo=TRUE, fig.height=5,fig.width=8}
+layout(matrix(1:2,ncol=2))
+boxplot(BW~reps, main="Body Weight", data=mouse, las=1,cex.axis = .8)
+boxplot(Gl~reps, main="Glucose", data=mouse, las=1,cex.axis = .8)
+```
+
+
+The exploratory data analysis is the process of analyzing and visualizing the data to get a better understanding of the data. It is not a formal statistical test.   
+
+Which factors should we include in the statistical model? To best answer these question we can fit a linear model that include these factors (sire, dam, sex, reps) in the model. This can be done using the `lm` function: 
+
+```{r, eval=T, echo=T}
+fit <- lm(BW~sire+dam+sex+reps, data=mouse)
+```
+
+To test the effect of the variables in the model use the `anova` function on the `fit` object from the `lm` function: 
+
+```{r, eval=T, echo=T}
+anova(fit)
+```
+
+
+##### Question 12: Do genetic factors influence the traits?
+
+Look at the output of the `anova` function.
+
+
+\hfill\break
+
+__Answer:__
+
+\hfill\break
+
+
+
+\newpage
+
+## Practical 2: Basic Quantitative Genetics
+
+### Introduction
+In this practical, we use R for exploratory data analysis of two quantitative traits—body weight and blood glucose levels—observed in the F2 mouse population. We will analyze the potential effects of a single marker locus by computing allele and genotype frequencies, evaluating various genetic models, and estimating breeding values and genetic variances associated with the marker.
+
+Additionally, you may find these `shinyapps` useful for gaining a better understanding of fundamental concepts in quantitative genetics.
+
+[qqshiny](https://neyhartj.shinyapps.io/qgshiny/) 
+
+[Falconer2](https://shiny.cnsgenomics.com/Falconer2/)
+
+
+The mouse data set including two genetic loci can be loaded using the following command:
+```{r, echo=T}
+mouse <- readRDS(url("https://github.com/PDRohde/AAU-human-genomics/raw/main/exercises/mouseqtl.rds"))
+```
+
+##### Question 1: How many observations and which variables do we have in the data set?
+
+To get a fast overview of the data set you are working with you can use the `str` function:
+
+
+\hfill\break
+
+__Answer:__
+
+\hfill\break
+
+```{r,  eval=TRUE, echo=TRUE}
+str(mouse)
+```
+
+#### Question 2: How many observations do the two marker variables have in each genotype class?
+
+Use the `table` function to explore the two marker variables:
+
+
+\hfill\break
+
+__Answer:__
+
+\hfill\break
+
+
+```{r, eval=TRUE, echo=TRUE}
+table(mouse$M227)
+```
+
+#### Question 3: What are the genotype and allele frequencies for M227?
+Include the allele and genotype frequencies for M227 in the following table:
+
+<style type="text/css">
+.tg  {border-collapse:collapse;border-color:#ccc;border-spacing:0;}
+.tg td{background-color:#fff;border-color:#ccc;border-style:solid;border-width:1px;color:#333;
+  font-family:Arial, sans-serif;font-size:12px;overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg th{background-color:#f0f0f0;border-color:#ccc;border-style:solid;border-width:1px;color:#333;
+  font-family:Arial, sans-serif;font-size:12px;font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg .tg-0lax{text-align:left;vertical-align:top}
+</style>
+<table class="tg"><thead>
+  <tr>
+    <th class="tg-0lax">Variable</th>
+    <th class="tg-0lax">M227</th>
+  </tr></thead>
+<tbody>
+  <tr>
+    <td class="tg-0lax">p(AA)</td>
+    <td class="tg-0lax"></td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">p(AB)</td>
+    <td class="tg-0lax"></td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">p(BB)</td>
+    <td class="tg-0lax"></td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">p(A)</td>
+    <td class="tg-0lax"></td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">p(B)</td>
+    <td class="tg-0lax"></td>
+  </tr>
+</tbody>
+</table>
+
+<br />
+<br />
+
+```{r,  eval=TRUE, echo=TRUE, fig.height=4,fig.width=8,fig.align='center'}
+freq_genotypes <- table(mouse$M227)/sum(table(mouse$M227))
+fA <- sum(table(mouse$M227)*c(2,1,0))/(sum(table(mouse$M227))*2)
+fB <- sum(table(mouse$M227)*c(0,1,2))/(sum(table(mouse$M227))*2)
+freq_alleles <- c(fA,fB)
+names(freq_alleles) <- c("A","B")
+layout(matrix(1:2,nrow=1))
+barplot(freq_genotypes, main="", las=1, ylab="Frequency", xlab="Genotypes", cex.axis = .8)
+barplot(freq_alleles, main="", las=1, ylab="Frequency", xlab="Alleles",cex.axis = .8)
+freq_genotypes
+freq_alleles
+```
+
+
+#### Question 4: Does the marker variable M227 potentially influence body weight and glucose?
+
+Use the `boxplot` function to visualize the potential effect of the marker variable M227 on the two traits:
+
+
+\hfill\break
+
+__Answer:__
+
+\hfill\break
+
+
+```{r, fig.align='center', eval=TRUE, echo=TRUE, fig.height=4,fig.width=7}
+layout(matrix(1:2,ncol=2))
+boxplot(BW~M227, main="M227 - Body Weight", data=mouse, las=1,cex.axis = .8)
+boxplot(Gl~M227, main="M227 - Glucose", data=mouse, las=1,cex.axis = .8)
+```
+
+To best answer these question we can fit a linear model that also include the effect of the marker variable in addition to sex and reps. This can be done using the `lm` function: 
+
+```{r, eval=TRUE, echo=TRUE}
+fit <- lm(BW~ sex + reps + M227, data=mouse)
+```
+
+To test the effect of the variables in the model use the `anova` function on the `fit` object from the `lm` function: 
+
+```{r, eval=TRUE, echo=TRUE}
+anova(fit)
+```
+
+#### Question 5: Based on the linear model results do marker variable M227 influence body weight?
+
+
+\hfill\break
+
+__Answer:__
+
+\hfill\break
+
+The additive effect is modeled by a variable, `add`, with levels that is coded as -1, 0, and 1 (corresponding to -a, 0, a) for the genotypes AA, AB, and BB. The following lines of R code create a the `add` variable, fit the linear model and test the effects:
+
+```{r, eval=TRUE, echo=TRUE}
+alleles <- c(-1,0,1)
+names(alleles) <- c("AA","AB","BB")
+mouse$add <- alleles[mouse$M227]
+fit <- lm(BW~ sex + reps + add, data=mouse)
+summary(fit)
+```
+
+The `summary(fit)` command produced 
+
+* parameter estimates (or Coefficients) $\widehat{\mu}$ and $\widehat{\beta}$, 
+* their standard errors (SE) (estimates for square root of the sampling variance of the parameter estimates), 
+* t-statistic (estimate/SE) and 
+* P-value under the null hypothesis that the parameter is 0 and errors are uncorrelated and have  distribution $N(0,\sigma^2)$. 
+
+Under the assumptions of linear model, sampling distribution of t-statistic is $t$-distribution and hence q% confidence intervals are determined as $\widehat{\beta}\pm a\times \textrm{SE}$, where $a$ is the q/2% quantile of $t$-distribution with $n-2$ degrees of freedom. To get a confidence interval use the `confint` function:
+
+
+```{r, eval=TRUE, echo=TRUE}
+confint(fit,parm="add")
+```
+
+The regression coefficient for the variable `add` is 1.74. The coefficient corresponds to the allele substitution effect ($\alpha$). Previously we have estimated allele and genotype frequencies for M227. The following table summarizes all genotypic values, all additive genetic values and the dominance deviations. 
+
+<style type="text/css">
+.tg  {border-collapse:collapse;border-spacing:0;}
+.tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  overflow:hidden;padding:8px 5px;word-break:normal;}
+.tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  font-weight:normal;overflow:hidden;padding:8px 5px;word-break:normal;}
+.tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}
+</style>
+<table class="tg"><thead>
+  <tr>
+    <th class="tg-0pky">Genotype</th>
+    <th class="tg-0pky">Genotypic value</th>
+    <th class="tg-0pky">Additive genetic value</th>
+    <th class="tg-0pky">Dominance deviation</th>
+  </tr></thead>
+<tbody>
+
+  <tr>
+    <td class="tg-0pky">A1A1</td>
+    <td class="tg-0pky">$a$</td>
+    <td class="tg-0pky">$2q\alpha$</td>
+    <td class="tg-0pky">$-2q^2d$</td>
+  </tr>
+  <tr>
+    <td class="tg-0pky">A1A2</td>
+    <td class="tg-0pky">$d$</td>
+    <td class="tg-0pky">$(q-p)\alpha$</td>
+    <td class="tg-0pky">$2pqd$</td>
+  </tr>
+  <tr>
+    <td class="tg-0pky">A2A2</td>
+    <td class="tg-0pky">$-a$</td>
+    <td class="tg-0pky">$-2p\alpha$</td>
+    <td class="tg-0pky">$-2p^2d$</td>
+  </tr>
+</tbody>
+</table>
+
+#### Question 6: What are the additive genetic value for body weight based on the M227 locus?  
+
+\hfill\break
+
+__Answer:__
+
+\hfill\break
+
+
+```{r,  eval=TRUE, echo=TRUE, fig.height=4,fig.width=6, fig.align="center"}
+alpha <- -fit$coefficients["add"]
+BV_AA <- 2*fA*alpha
+BV_AB <- (fA-fB)*alpha
+BV_BB <- -2*fA*alpha
+BV <- c(BV_AA,BV_AB,BV_BB)
+names(BV) <- c("AA","AB","BB")
+barplot(BV, ylab="Additive genetic value", xlab="Genotype", las=1,cex.axis = .8)
+```
+
+
+Now we want to compute the genetic variance associated with marker M227. The formula below shows that genetic variance for a single locus model $\sigma_G^2$ consists of two components. The first component $\sigma_A^2$ is called the __genetic additive variance__ and the second component $\sigma_D^2$ is termed __dominance variance__. Here $\sigma_A^2$ corresponds to the variance of the additive genetic values. In populations where there is no additive genetic variance, individuals all have the same additive genetic value. Therefore, they will produce offspring with the same expected advantage (zero), and selection cannot generate any improvement over generations. Because $\sigma_D^2$ corresponds to the variance of the dominance deviation effects it is called dominance variance.
+
+\begin{align}
+  \sigma_G^2 &=  2pq\alpha^2 + \left(2pqd \right)^2 \notag\\
+             &=  \sigma_A^2 + \sigma_D^2 \notag
+\end{align}
+
+
+#### Question 7: What is the additive genetic variance associated with M227 for body weight?   
+
+\hfill\break
+
+__Answer:__
+
+\hfill\break
+
+
+```{r,  eval=TRUE, echo=TRUE,, fig.height=4,fig.width=4,fig.align="center"}
+alpha <- fit$coefficients["add"]
+d <- 0
+Va <- 2*fA*fB*alpha^2
+Vd <-  (2*fA*fB*d)^2
+Vg <- Va + Vd
+V <- c(Vg,Va,Vd)
+names(V) <- c("Vg","Va","Vd")
+barplot(V, ylab="Estimated variances", xlab="Components", las=1,cex.axis = .8)
+```
+
+#### Question 8: Should you have considered other factors in the linear model specified above?   
+
+\hfill\break
+
+__Answer:__
+
+\hfill\break
+
+
+Now we will fit the full genetic model to locus M227 including both additive and dominance effects. The additive effect is modeled as previously shown by a variable `add` that is coded as -1, 0, and 1 (corresponding to -a, 0, a) for the genotypes AA, AB, and BB. The dominance effect is modeled by a variable `dom` that is coded as 0, 1, and 0 (corresponding to 0,d,0) for the genotypes AA, AB, and BB. The corresponding R code is shown below: 
+
+```{r, eval=TRUE, echo=TRUE}
+alleles <- c(-1,0,1)
+names(alleles) <- c("AA","AB","BB")
+mouse$add <- alleles[mouse$M227]
+mouse$dom <- as.numeric(mouse$add==1)
+fit <- lm(BW~sex + reps + add+dom, data=mouse)
+summary(fit)
+confint(fit,parm="add")
+confint(fit,parm="dom")
+```
+
+The results from the linear model analysis suggest that only the additive genetic effect, `add`, is significantly different from 0. 
+
+<br />
+<br />

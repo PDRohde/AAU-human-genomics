@@ -1,0 +1,96 @@
+---
+title: "Human Genomics"
+subtitle: "Session 5: Estimation of genetic parameters"
+author:
+  - name: "Palle Duun Rohde & Peter Sørensen"
+    url: https://pdrohde.github.io/
+    affiliation: Genomic Medicine, Aalborg University
+    email: palledr@hst.aau.dk
+output: html_document
+---
+<style type="text/css">
+
+body, td {
+   font-size: 14px;
+}
+code.r{
+  font-size: 12px;
+}
+pre {
+  font-size: 12px
+}
+</style>
+---
+
+```{r setup, include=FALSE} 
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = "/Users/fs61oo/Documents/GitHub/AAU-human-genomics/")
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+```
+
+## Introduction
+In these practical sessions, we will analyze quantitative traits in a mouse population. The dataset includes phenotypic measurements related to growth and obesity, such as body weight and blood glucose levels, along with genetic marker data.
+
+The __M16 mouse__ was developed as an outbred model for early-onset polygenic obesity and diabesity. This was achieved through 27 generations of selective breeding for weight gain between 3 and 6 weeks of age, starting from an outbred ICR base population. The breeding strategy involved selecting the male and female with the highest weight gain within each litter. A parallel ICR control line was maintained through random mating while preserving a similar effective population size. Compared to ICR mice, M16 mice are consistently larger at all ages and exhibit increased body fat percentage, fat cell size and number, as well as larger organ weights. They also display hyperphagia, moderate obesity, and metabolic abnormalities, including hyperglycemia, hyperinsulinemia, and hypercholesterolemia.
+
+The __ICR mouse__ is an albino strain originally derived from SWISS mice and selectively bred by Dr. Hauschka to establish a highly fertile line. Named after the Institute of Cancer Research (ICR) in the USA, where it was developed, this strain has been widely distributed for research. ICR mice are relatively large, docile, and grow well, making them a widely used general-purpose model in various research fields, including toxicity studies, pharmacology, drug efficacy, and immunology.
+
+A large __F2 population__ (n=1181) was established by crossing the M16 and ICR lines. Twelve F1 families resulted from six pair matings of M16 males x ICR females and six pair matings of the reciprocal cross. A total of 55 F1 dams were mated to 11 F1 sires in sets of five F1 full sisters mated to the same F1 sire. These same specific matings were repeated in three consecutive replicates. Thus, the F2 population consisted of 55 full-sib families of up to 24 individuals each and 11 sire families families of up to 120 individuals each. Actual numbers of mice within families varied slightly due to a small number of failed pregnancies. All litters were standardized at birth to eight pups, with approximately equal representation of males and females.
+
+More information about the mouse data can be found in the following publications:
+
+Allan, M.F., Eisen, E.J. and Pomp, D. (2004). The M16 Mouse: An Outbred Animal Model of Early Onset Polygenic Obesity and Diabesity. Obesity Research, 12: 1397-1407. https://doi.org/10.1038/oby.2004.176
+
+Allan, M. F., Eisen E. J and Pomp, D. (2005). Genomic Mapping of Direct and Correlated Responses to Long-Term Selection for Rapid Growth Rate in Mice. Genetics, 170(4): 1863–1877. https://doi.org/10.1534/genetics.105.041319
+
+<br />
+<br />
+
+
+## Practical 3: Estimation of Genetic Parameters
+### Introduction
+In this practical we will estimate genetic parameters (heritability) for quantitative traits observed in the F2 mouse population. We will be using the REML method. This method allow for estimation of genetic parameters using phenotypic information for individuals from a general pedigree. REML is based on linear mixed model methodology and uses a likelihood approach to estimate genetic parameters. The REML method also require us to calculate an genetic relationship matrix using a recursive algorithm. These methods and algorithms are implemented in the R package `qgg`.
+
+This package provides an infrastructure for efficient processing of large-scale genetic and phenotypic data including core functions for: 
+
+* fitting linear mixed models 
+* constructing genetic relationship matrices 
+* estimating genetic parameters (heritability and correlation) 
+* performing genomic prediction and genetic risk profiling 
+* single or multi-marker association analyses
+
+We will also be using the qgg package for the remaining practicals. 
+
+### Installation of the R package qgg
+
+You can install qgg from CRAN with:
+
+```{r,  eval=FALSE, echo=TRUE}
+install.packages("qgg")
+```
+
+### Load R packages that will be used in this practical
+
+```{r, echo=T}
+library(qgg) # R package used for REML analysis
+#install.packages("corrplot") 
+library(corrplot)
+```
+
+### Explore mouse pedigree data
+
+The mouse data set can be loaded using the following command:
+```{r, echo=T}
+mouse <- readRDS(url("https://github.com/PDRohde/AAU-human-genomics/raw/main/exercises/mouseqtl.rds"))
+```
+
+The mouse pedigree is loaded in a similar way using the following command:
+```{r, echo=T}
+pedigree <- readRDS(url("https://github.com/PDRohde/AAU-human-genomics/raw/main/exercises/mousepedigree.rds"))
+```
+
+
+
+
+
+
