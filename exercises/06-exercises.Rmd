@@ -1,0 +1,43 @@
+---
+title: "Human Genomics"
+subtitle: "Session 6: GWAS"
+author:
+  - name: "Palle Duun Rohde"
+    url: https://pdrohde.github.io/
+    affiliation: Genomic Medicine, Aalborg University
+    email: palledr@hst.aau.dk
+output: html_document
+---
+<style type="text/css">
+
+body, td {
+   font-size: 14px;
+}
+code.r{
+  font-size: 12px;
+}
+pre {
+  font-size: 12px
+}
+</style>
+---
+
+```{r setup, include=FALSE} 
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = "/Users/fs61oo/Documents/GitHub/AAU-human-genomics/")
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+```
+
+## Exercise 1
+Based on the paper by Uffelmann et al. (2021) discuss in groups the following questions.
+
+1)  Why should the individuals used in a GWAS be of “similar ancestry”.
+2)	What is meant by “proxy” phenotypes and give some examples.
+3)	What are some of the key considerations one should be aware of prior to conducting a GWAS?
+4)	What is a “GWAS meta-analysis” and why are they conducted?
+5)	Describe what a Manhattan plot is (what is on the axes, what does each dot represents etc), and what is the purpose of a QQ-plot?
+6)	What is the aim of fine mapping?
+7)	What is meant by “the genetic architecture of a trait”?
+8)	What can the benefits be of conducting a genetic study in an isolated population?
+9)	Write a [max] 500 words summary condensing the main message from Figure 1 and Figure 3
+

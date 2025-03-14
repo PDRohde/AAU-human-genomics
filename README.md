@@ -46,8 +46,8 @@ The course responsible is Palle Duun Rohde ([Email](mailto:palledr@hst.aau.dk?su
   [&nbsp; Exercises](exercises/05-exercises.html)  
 
  **Session 6: Genome-wide association studies** \
-<!--[&nbsp; Lecture notes]() -->
-<!--[&nbsp; Exercises]() -->
+  [&nbsp; Lecture notes](lecture_notes/06-session_slides-github.pdf)
+  [&nbsp; Exercises](exercises/06-exercises.html)
 
  **Session 7: Risk estimation from genome-wide data** \
 <!--[&nbsp; Lecture notes]() -->
