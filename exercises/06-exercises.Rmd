@@ -70,6 +70,8 @@ __Answer:__
 ```{r, echo=T}
 ncol(genotypes)
 ```
+<br />
+<br />
 
 ##### Question 2: What is the genotype frequencies of the first SNP?
 
@@ -83,6 +85,8 @@ __Answer:__
 ```{r, echo=T}
 table(genotypes[,1])/nrow(genotypes)
 ```
+<br />
+<br />
 
 ##### Question 3: What is the allele frequencies of the first SNP?
 
@@ -98,7 +102,8 @@ p.A <- (2*sum(genotypes[,1]==0) + sum(genotypes[,1]==1) ) / (2*nrow(genotypes))
 p.a <- (2*sum(genotypes[,1]==2) + sum(genotypes[,1]==1) ) / (2*nrow(genotypes))
 (p.A + p.a) == 1
 ```
-
+<br />
+<br />
 
 ##### Question 4: Make a plot showing the distribution of allele frequencies across all SNPs.
 
@@ -115,7 +120,8 @@ freq <- apply(genotypes, 2, function(x){ (2*sum(x==0) + sum(x==1) ) / (2*nrow(ge
 hist(freq, las=1, cex.axis=.8, xlab="Frequency of 0-allele", main="", col="lightblue", breaks=20, xlim=c(0,1))
 
 ```
-
+<br />
+<br />
 
 ##### Question 5: What are the minimum and maxium allele frequencies?
 
@@ -134,7 +140,8 @@ colnames(genotypes)[which.min(freq)]
 max(freq)
 colnames(genotypes)[which.max(freq)]
 ```
-
+<br />
+<br />
 
 ##### Question 6: Remove SNPs with frequency below 5%
 
@@ -157,6 +164,8 @@ abline(v=0.05, lwd=2,lty=2,col="darkred")
 abline(v=0.95, lwd=2,lty=2,col="darkred")
 
 ```
+<br />
+<br />
 
 ##### Question 7: Why is it important to remove SNPs with _rare_ alleles (here rare defined by frequency of 5%) when doing genetic associations?
 
@@ -166,7 +175,7 @@ __Answer:__
 
 \hfill\break
 <br />
-
+<br />
 
 ##### Question 8: Associate body weight with the first SNP. What does the statistics tell about the association between BW and the first SNP?
 
@@ -192,7 +201,8 @@ axis(side=1, at=c(0,1,2),cex.axis=.8)
 abline(lm(BW ~ SNP, data=dat),col="darkorange", lwd=2,lty=2)
 mtext(side=3, expression(paste(beta,"=0.53; ", italic(P), "=0.043")), line=.5)
 ```
-
+<br />
+<br />
 
 ##### Question 9: Associate body weight with all available SNPs. Investigate the results.
 
@@ -227,6 +237,8 @@ plot(x=1:nrow(ass.res), y=-log10(ass.res[,"Pr(>|t|)"]), xlab=",labels=Genetic va
 axis(side=1, at=c(1,nrow(ass.res)),cex.axis=.8, labels=NA)
 
 ```
+<br />
+<br />
 
 ##### Question 10: How many SNPs are associated with body weight?
 
@@ -248,7 +260,8 @@ axis(side=1, at=c(1,nrow(ass.res)),cex.axis=.8,labels=NA)
 abline(h=-log10(0.05/nrow(genotypes)),lty=2,col="grey")
 
 ```
-
+<br />
+<br />
 
 ##### Question 11: Are the SNPs tested independent, or are they in LD?
 
@@ -269,6 +282,8 @@ r[1:5,1:5]
 ```{r, eval=TRUE, echo=T, message=FALSE, fig.height=7,fig.width=7,fig.align='center'}
 corrplot(r, method="color", bg="white", col= colorRampPalette(rev(c("#B4362AFF", "#DA5A5AFF","white", "#62AFD7FF", "#233253FF")))(10), tl.pos="n", outline=FALSE, xlab=FALSE, ylab=FALSE, is.corr=T,type = 'lower', diag = FALSE)
 ```
+<br />
+<br />
 
 ##### Question 12: Is there LD between the SNP with strongest association signal and the remaining SNPs?
 
@@ -283,8 +298,6 @@ plot(abs(r[,which.min(ass.res[,"Pr(>|t|)"])]),type="l", las=1, ylab="Absolute co
 axis(side=1, at=c(1,which.min(ass.res[,"Pr(>|t|)"]),ncol(r)), labels=c("-241","index","+1513"))
 
 ```
-
-
 
 <br />
 <br />
