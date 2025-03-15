@@ -28,7 +28,269 @@ knitr::opts_knit$set(root.dir = "/Users/fs61oo/Documents/GitHub/AAU-human-genomi
 knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
 ```
 
+```{r, echo=T}
+#install.packages("corrplot") 
+library(corrplot)
+```
+
 ## Exercise 1
+In this small exercise we will use the mouse population data you have used in previous exercises. The dataset includes phenotypic measurements related to growth and obesity, such as body weight and blood glucose levels, along with genetic marker data.
+
+The __M16 mouse__ was developed as an outbred model for early-onset polygenic obesity and diabesity. This was achieved through 27 generations of selective breeding for weight gain between 3 and 6 weeks of age, starting from an outbred ICR base population. The breeding strategy involved selecting the male and female with the highest weight gain within each litter. A parallel ICR control line was maintained through random mating while preserving a similar effective population size. Compared to ICR mice, M16 mice are consistently larger at all ages and exhibit increased body fat percentage, fat cell size and number, as well as larger organ weights. They also display hyperphagia, moderate obesity, and metabolic abnormalities, including hyperglycemia, hyperinsulinemia, and hypercholesterolemia.
+
+The __ICR mouse__ is an albino strain originally derived from SWISS mice and selectively bred by Dr. Hauschka to establish a highly fertile line. Named after the Institute of Cancer Research (ICR) in the USA, where it was developed, this strain has been widely distributed for research. ICR mice are relatively large, docile, and grow well, making them a widely used general-purpose model in various research fields, including toxicity studies, pharmacology, drug efficacy, and immunology.
+
+A large __F2 population__ (n=1181) was established by crossing the M16 and ICR lines. Twelve F1 families resulted from six pair matings of M16 males x ICR females and six pair matings of the reciprocal cross. A total of 55 F1 dams were mated to 11 F1 sires in sets of five F1 full sisters mated to the same F1 sire. These same specific matings were repeated in three consecutive replicates. Thus, the F2 population consisted of 55 full-sib families of up to 24 individuals each and 11 sire families families of up to 120 individuals each. Actual numbers of mice within families varied slightly due to a small number of failed pregnancies. All litters were standardized at birth to eight pups, with approximately equal representation of males and females.
+
+More information about the mouse data can be found in the following publications:
+
+Allan, M.F., Eisen, E.J. and Pomp, D. (2004). The M16 Mouse: An Outbred Animal Model of Early Onset Polygenic Obesity and Diabesity. Obesity Research, 12: 1397-1407. https://doi.org/10.1038/oby.2004.176
+
+Allan, M. F., Eisen E. J and Pomp, D. (2005). Genomic Mapping of Direct and Correlated Responses to Long-Term Selection for Rapid Growth Rate in Mice. Genetics, 170(4): 1863–1877. https://doi.org/10.1534/genetics.105.041319
+
+<br />
+
+First, you should read the mouse phenotype and genotype data:
+```{r, echo=T}
+mouse <- readRDS(url("https://github.com/PDRohde/AAU-human-genomics/raw/main/exercises/mouseqtl.rds"))
+ids <- rownames(mouse)
+genotypes <- readRDS(url("https://github.com/PDRohde/AAU-human-genomics/raw/main/exercises/mousegenotypes_imputed.rds"))
+genotypes <- genotypes[ids,]
+```
+
+##### Question 1: How many genetics variants are there in total in the dataset?
+
+\hfill\break
+
+__Answer:__
+
+\hfill\break
+
+
+```{r, echo=T}
+ncol(genotypes)
+```
+
+##### Question 2: What is the genotype frequencies of the first SNP?
+
+\hfill\break
+
+__Answer:__
+
+\hfill\break
+
+
+```{r, echo=T}
+table(genotypes[,1])/nrow(genotypes)
+```
+
+##### Question 3: What is the allele frequencies of the first SNP?
+
+\hfill\break
+
+__Answer:__
+
+\hfill\break
+
+
+```{r, echo=T}
+p.A <- (2*sum(genotypes[,1]==0) + sum(genotypes[,1]==1) ) / (2*nrow(genotypes))
+p.a <- (2*sum(genotypes[,1]==2) + sum(genotypes[,1]==1) ) / (2*nrow(genotypes))
+(p.A + p.a) == 1
+```
+
+
+##### Question 4: Make a plot showing the distribution of allele frequencies across all SNPs.
+
+\hfill\break
+
+__Answer:__
+
+\hfill\break
+
+
+```{r, echo=T, fig.height=4,fig.width=4,fig.align='center'}
+par(lwd=1.5)
+freq <- apply(genotypes, 2, function(x){ (2*sum(x==0) + sum(x==1) ) / (2*nrow(genotypes)) } )
+hist(freq, las=1, cex.axis=.8, xlab="Frequency of 0-allele", main="", col="lightblue", breaks=20, xlim=c(0,1))
+
+```
+
+
+##### Question 5: What are the minimum and maxium allele frequencies?
+
+\hfill\break
+
+__Answer:__
+
+\hfill\break
+
+
+```{r, echo=T}
+
+min(freq)
+colnames(genotypes)[which.min(freq)]
+
+max(freq)
+colnames(genotypes)[which.max(freq)]
+```
+
+
+##### Question 6: Remove SNPs with frequency below 5%
+
+\hfill\break
+
+__Answer:__
+
+\hfill\break
+
+
+```{r, echo=T,fig.height=4,fig.width=4,fig.align='center'}
+
+keep <- freq > 0.05 & freq < 0.95 
+genotypes <- genotypes[,keep]
+par(lwd=1.5)
+
+freq <- apply(genotypes, 2, function(x){ (2*sum(x==0) + sum(x==1) ) / (2*nrow(genotypes)) } )
+hist(freq, las=1, cex.axis=.8, xlab="Frequency of 0-allele", main="", col="lightblue", breaks=20, xlim=c(0,1))
+abline(v=0.05, lwd=2,lty=2,col="darkred")
+abline(v=0.95, lwd=2,lty=2,col="darkred")
+
+```
+
+##### Question 7: Why is it important to remove SNPs with _rare_ alleles (here rare defined by frequency of 5%) when doing genetic associations?
+
+\hfill\break
+
+__Answer:__
+
+\hfill\break
+<br />
+
+
+##### Question 8: Associate body weight with the first SNP. What does the statistics tell about the association between BW and the first SNP?
+
+\hfill\break
+
+__Answer:__
+
+\hfill\break
+
+
+```{r, echo=T}
+dat <- cbind(mouse, genotypes[,1])
+colnames(dat)[ncol(dat)] <- "SNP"
+
+fit <- lm(BW ~ SNP + sex + reps, data=dat)
+summary(fit)
+```
+
+```{r, echo=T,fig.height=4,fig.width=4,fig.align='center'}
+
+plot(x=dat$SNP+runif(nrow(dat),-.3,.3), y=dat$BW, pch=21, bg="lightblue", ylab="Body weight", xlab="Genotype", xaxt="n",cex.axis=.8, las=1)
+axis(side=1, at=c(0,1,2),cex.axis=.8)
+abline(lm(BW ~ SNP, data=dat),col="darkorange", lwd=2,lty=2)
+mtext(side=3, expression(paste(beta,"=0.53; ", italic(P), "=0.043")), line=.5)
+```
+
+
+##### Question 9: Associate body weight with all available SNPs. Investigate the results.
+
+\hfill\break
+
+__Answer:__
+
+\hfill\break
+
+```{r, echo=T}
+ass.res <- vector(length=ncol(genotypes),mode="list")
+
+for(i in 1:ncol(genotypes)){
+  dat <- cbind(mouse, genotypes[,i])
+  colnames(dat)[ncol(dat)] <- "SNP"
+  fit <- lm(BW ~ SNP + sex + reps, data=dat)
+  ass.res[[i]] <- summary(fit)$coefficients["SNP",]  
+}
+ass.res <- do.call(rbind,ass.res)
+rownames(ass.res) <- colnames(genotypes)
+
+head(ass.res)
+summary(ass.res)
+```
+
+We can summarise the results from all SNP associations by plotting the $-log_{10}(P)$-value from each linear model.
+
+```{r, echo=T,fig.height=5,fig.width=10,fig.align='center'}
+
+plot(x=1:nrow(ass.res), y=-log10(ass.res[,"Pr(>|t|)"]), xlab=",labels=Genetic variants", 
+     las=1, ylab="-log10(P)", bty="n", pch=21, cex=.8, xaxt="n")
+axis(side=1, at=c(1,nrow(ass.res)),cex.axis=.8, labels=NA)
+
+```
+
+##### Question 10: How many SNPs are associated with body weight?
+
+\hfill\break
+
+__Answer:__
+
+\hfill\break
+
+The $P$-values must be adjusted for multiple testing to control the risk of false positives (Type I errors). When conducting multiple statistical tests, the likelihood of incorrectly rejecting at least one true null hypothesis increases. Adjustment methods, such as Bonferroni or FDR correction, help maintain the overall error rate, ensuring that significant results are not due to random chance. The most simple approach to account for multiple testing is the Bonferroni correction. The Bonferroni corrected significance threshold is obtained by dividing the normal significance level ($\alpha$=0.05) by the number of statistical tests performed. 
+
+In this example we performed `r nrow(genotypes)` linear regressions, thus, the new significance level should be `0.05/nrow(genotypes)`=`r 0.05/nrow(genotypes)`. We can modify the plot from above to highlight SNPs that have a $P$-below the Bonferroni corrected significance level.
+
+```{r, echo=T,fig.height=5,fig.width=10,fig.align='center'}
+cols <- c("white","lightblue")
+plot(x=1:nrow(ass.res), y=-log10(ass.res[,"Pr(>|t|)"]), xlab="Genetic variants", las=1, ylab="-log10(P)", bty="n", pch=21, cex=.8,
+     bg=cols[1+(ass.res[,"Pr(>|t|)"]<0.05/nrow(genotypes))], xaxt="n")
+axis(side=1, at=c(1,nrow(ass.res)),cex.axis=.8,labels=NA)
+abline(h=-log10(0.05/nrow(genotypes)),lty=2,col="grey")
+
+```
+
+
+##### Question 11: Are the SNPs tested independent, or are they in LD?
+
+\hfill\break
+
+__Answer:__
+
+\hfill\break
+
+We can quantify the degree of LD by computing the correlation among the SNPs.
+```{r}
+r <- cor(genotypes)
+r[1:5,1:5]
+
+```
+
+
+```{r, eval=TRUE, echo=T, message=FALSE, fig.height=7,fig.width=7,fig.align='center'}
+corrplot(r, method="color", bg="white", col= colorRampPalette(rev(c("#B4362AFF", "#DA5A5AFF","white", "#62AFD7FF", "#233253FF")))(10), tl.pos="n", outline=FALSE, xlab=FALSE, ylab=FALSE, is.corr=T,type = 'lower', diag = FALSE)
+```
+
+##### Question 12: Is there LD between the SNP with strongest association signal and the remaining SNPs?
+
+\hfill\break
+
+__Answer:__
+
+\hfill\break
+
+```{r fig.height=4,fig.width=6,fig.align='center'}
+plot(abs(r[,which.min(ass.res[,"Pr(>|t|)"])]),type="l", las=1, ylab="Absolute correlation", cex.axis=.8, xaxt="n", xlab="")
+axis(side=1, at=c(1,which.min(ass.res[,"Pr(>|t|)"]),ncol(r)), labels=c("-241","index","+1513"))
+
+```
+
+
+
+<br />
+<br />
+
+
+## Exercise 2
 Based on the paper by Uffelmann et al. (2021) discuss in groups the following questions.
 
 1)  Why should the individuals used in a GWAS be of “similar ancestry”.
