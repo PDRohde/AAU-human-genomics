@@ -298,10 +298,37 @@ plot(abs(r[,which.min(ass.res[,"Pr(>|t|)"])]),type="l", las=1, ylab="Absolute co
 axis(side=1, at=c(1,which.min(ass.res[,"Pr(>|t|)"]),ncol(r)), labels=c("-241","index","+1513"))
 
 ```
-
 <br />
 <br />
 
+##### Question 13: Does LD affect our interpretation of the genetic associations?
+
+\hfill\break
+
+__Answer:__
+
+\hfill\break
+
+```{r fig.height=5,fig.width=6,fig.align='center'}
+
+locus <- which.min(ass.res[,"Pr(>|t|)"])
+locus.range <- c((locus-100):locus:(locus+100))
+
+locus.zoom <- as.data.frame(ass.res[locus.range,])
+locus.zoom$ld <- abs(r[locus,locus.range])
+
+rbPal <- colorRampPalette(c("#FCDD23FF", "#F8B100FF", "#CA697CFF", "#AB74CFFF", "#48439BFF"))
+locus.zoom$cols <- rbPal(10)[as.numeric(cut(locus.zoom$ld,breaks = 10))]
+
+plot(x=locus.range, y=-log10(locus.zoom[,"Pr(>|t|)"]),xlab="Genetic variants", las=1, ylab="-log10(P)", bty="n", pch=21,
+     bg=locus.zoom$cols, xaxt="n")
+legend("topright",title="LD (abs correlation)",legend=unique(cut(locus.zoom$ld,breaks = 10)),pt.bg =rbPal(10),pch=21,cex=.7)
+axis(side=1, at=c((locus-100),locus,(locus+100)),cex.axis=.8,labels=c("","index", ""))
+abline(h=-log10(0.05/nrow(genotypes)),lty=2,col="grey")
+
+```
+<br />
+<br />
 
 ## Exercise 2
 Based on the paper by Uffelmann et al. (2021) discuss in groups the following questions.
