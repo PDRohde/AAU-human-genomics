@@ -101,7 +101,7 @@ __Answer:__
 p.A <- (2*sum(genotypes[,1]==0) + sum(genotypes[,1]==1) ) / (2*nrow(genotypes))
 print(p.A)
 p.a <- (2*sum(genotypes[,1]==2) + sum(genotypes[,1]==1) ) / (2*nrow(genotypes))
-print(p.A)
+print(p.a)
 ```
 
 We can check whether we have computed the frequencies correct as we know they should sum to 1
