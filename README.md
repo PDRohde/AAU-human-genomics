@@ -52,7 +52,7 @@ The course responsible is Palle Duun Rohde ([Email](mailto:palledr@hst.aau.dk?su
  **Session 7: Risk estimation from genome-wide data** \
   [&nbsp; Lecture notes](lecture_notes/07-session_slides-github.pdf)  
   [&nbsp; Exercises 1](exercises/PGS-exercise.xlsx)  
-  [&nbsp; Exercises 2](exercises/07-exercise.html)  
+  [&nbsp; Exercises 2](exercises/07-exercises.html)  
 
  **Session 8: Somatic cancer genomics** \
 <!--[&nbsp; Lecture notes]() -->
