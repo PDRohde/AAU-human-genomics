@@ -366,9 +366,9 @@ Glist <- readRDS("Glist_sparseLD_1k.RDS")
 
 Note, if you have troubles computing LD, you can download the ld and updated Glist below.
 ```{r,  eval=FALSE, echo=TRUE}
-url <- "https://github.com/PDRohde/AAU-human-genomics/raw/main/exercises/human.ld"
+url <- "https://www.dropbox.com/scl/fi/5g9i631gq67wunk6njptr/human.ld?rlkey=00yk4oev7drk33syp6cjjke8j&dl=0"
 download.file( url=url, destfile="human.ld")
-url <- "https://github.com/PDRohde/AAU-human-genomics/raw/main/exercises/Glist_sparseLD_1k.RDS"
+url <- "https://www.dropbox.com/scl/fi/r23vhgt5okw37gohz71vu/Glist_sparseLD_1k.RDS?rlkey=ktv1p427kct9j13sydnn5k2a3&dl=0"
 download.file( url=url, destfile="Glist_sparseLD_1k.RDS")
 ```
 <br />
