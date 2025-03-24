@@ -359,18 +359,20 @@ saveRDS(Glist, file="Glist_sparseLD_1k.RDS", compress=FALSE)
 ```
 <br />
 
-```{r, eval=T, echo=F}
-Glist <- readRDS("Glist_sparseLD_1k.RDS")
-```
-<br />
 
-Note, if you have troubles computing LD, you can download the ld and updated Glist below.
+Note, it may take long time to compute LD, therefore, you can download the ld-file and updated Glist below. Remember to read the new `Glist`.
 ```{r,  eval=FALSE, echo=TRUE}
 url <- "https://www.dropbox.com/scl/fi/5g9i631gq67wunk6njptr/human.ld?rlkey=00yk4oev7drk33syp6cjjke8j&dl=0"
 download.file( url=url, destfile="human.ld")
 url <- "https://www.dropbox.com/scl/fi/r23vhgt5okw37gohz71vu/Glist_sparseLD_1k.RDS?rlkey=ktv1p427kct9j13sydnn5k2a3&dl=0"
 download.file( url=url, destfile="Glist_sparseLD_1k.RDS")
 ```
+<br />
+```{r, eval=T, echo=F}
+Glist <- readRDS("Glist_sparseLD_1k.RDS")
+```
+
+
 <br />
 <br />
 
