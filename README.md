@@ -55,7 +55,7 @@ The course responsible is Palle Duun Rohde ([Email](mailto:palledr@hst.aau.dk?su
   [&nbsp; Exercises 2](exercises/07-exercises.html)  
 
  **Session 8: Somatic cancer genomics** \
-<!--[&nbsp; Lecture notes]() -->
+   [&nbsp; Lecture notes](lecture_notes/08-session_slides-github.pdf)  
 <!--[&nbsp; Exercises]() -->
 
  **Session 9: Germline cancer genomics** \
