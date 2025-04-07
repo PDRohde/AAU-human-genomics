@@ -60,8 +60,8 @@ The course responsible is Palle Duun Rohde ([Email](mailto:palledr@hst.aau.dk?su
 <!--[&nbsp; Exercises]() -->
 
  **Session 9: Germline cancer genomics** \
-<!--[&nbsp; Lecture notes]() -->
-<!--[&nbsp; Exercises]() -->
+   [&nbsp; Lecture notes](lecture_notes/09-session_slides-github.pdf)  
+   [&nbsp; Exercises](exercises/09-exercises.pdf)  
 
  **Session 10: Integrative genomics** \
 <!--[&nbsp; Lecture notes]() -->
