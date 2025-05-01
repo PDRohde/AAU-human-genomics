@@ -64,7 +64,7 @@ The course responsible is Palle Duun Rohde ([Email](mailto:palledr@hst.aau.dk?su
    [&nbsp; Exercises](exercises/09-exercises.pdf)  
 
  **Session 10: Integrative genomics** \
-<!--[&nbsp; Lecture notes]() -->
+  [&nbsp; Lecture notes](lecture_notes/10-session_slides-github.pdf)
 <!--[&nbsp; Exercises]() -->
 
  
