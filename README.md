@@ -3,7 +3,8 @@ title: "Course material for the master course in Human Genomics"
 permalink: /
 layout: default
 ---
-<i>All teaching materials on this page are shared under a CC BY 4.0 license.</i>
+<i>All teaching materials on this page are shared under a CC BY 4.0 license.</i><br>
+
 
 # Course material for the master course in Human Genomics
 This page contains the material used within the   course in **Human Genomics** for students studying *Biomedicine* at the master program in Medicine with Industrial Specialisation at Aalborg University, Denmark.
