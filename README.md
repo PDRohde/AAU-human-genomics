@@ -25,9 +25,9 @@ The course responsible is Palle Duun Rohde ([Email](mailto:palledr@hst.aau.dk?su
 
 ## Sessions
 **Session 1: Introduction to genetic variation and personalised medicine** \
-<!-- [&nbsp; Lecture notes](lecture_notes/01-session_slides-github.pdf)  -->
-<!-- [&nbsp; Exercises](exercises/01-exercises.html)  -->
- <!--[&nbsp; Intro to R](exercises/01-r-intro.html)  -->
+[&nbsp; Lecture notes](lecture_notes/01-session_slides-github.pdf)
+[&nbsp; Exercises](exercises/01-exercises.html)
+[&nbsp; Intro to R](exercises/01-r-intro.html)
 
 **Session 2: Population genomics** \
  <!--[&nbsp; Lecture notes](lecture_notes/02-session_slides-github.pdf)  -->
