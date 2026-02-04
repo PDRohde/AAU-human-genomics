@@ -30,8 +30,8 @@ The course responsible is Palle Duun Rohde ([Email](mailto:palledr@hst.aau.dk?su
  [&nbsp; Intro to R](exercises/01-r-intro.html)  
 
 **Session 2: Population genomics** \
- <!--[&nbsp; Lecture notes](lecture_notes/02-session_slides-github.pdf)  -->
- <!--[&nbsp; Exercises](exercises/02-exercises.html)    -->
+  [&nbsp; Lecture notes]<!-- (lecture_notes/02-session_slides-github.pdf)  -->
+  [&nbsp; Exercises](exercises/02-exercises.html)   
 
  <!-- 
  **Session 3: Risk estimation from pedigrees** \
