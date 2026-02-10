@@ -28,6 +28,18 @@ library(patchwork)
 set.seed(666)
 ```
 
+Make sure to run this first.
+```{r, eval=F}
+set.seed(666)
+
+install.packages("ggplot2")
+install.packages("reshape2")
+
+library(ggplot2)
+library(reshape2)
+
+```
+
 ### Part I
 #### Exercise 1
 Population geneticists analyze the extent and patterns of genetic variation within populations, the distribution of genotypes, and the influence of evolutionary forces like natural selection and genetic drift. These factors drive evolutionary change and speciation. Based on your current understanding, how would you address the following questions?
@@ -213,8 +225,6 @@ We can count how many we have of each genotype using the `table(snp)` function.
 5.  Why does the matrix `p.A` contains many values that are `NA` ?
 6.  Visualise the results from these simulations. What do you see?
 ```{r, eval=F}
-library(ggplot2)
-library(reshape2)
 p.A <- melt(p.A)
 ggplot(p.A[!is.na(p.A$value),], aes(x = Var2, y = value, fill = factor(Var2))) +
   geom_hline(yintercept = p, linetype = "dashed", color = "darkorange", linewidth = 0.75) +
