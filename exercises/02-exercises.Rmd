@@ -28,18 +28,6 @@ library(patchwork)
 set.seed(666)
 ```
 
-Make sure to run this first.
-```{r, eval=F}
-set.seed(666)
-
-install.packages("ggplot2")
-install.packages("reshape2")
-
-library(ggplot2)
-library(reshape2)
-
-```
-
 ### Part I
 #### Exercise 1
 Population geneticists analyze the extent and patterns of genetic variation within populations, the distribution of genotypes, and the influence of evolutionary forces like natural selection and genetic drift. These factors drive evolutionary change and speciation. Based on your current understanding, how would you address the following questions?
@@ -134,6 +122,19 @@ A geneticist studying a human population discovers that a recessive allele (<tt>
 
 #### Exercise 6 
 This exercise should be solved using <tt>R</tt>.
+
+Make sure to run this first.
+```{r, eval=F}
+set.seed(666)
+
+install.packages("ggplot2")
+install.packages("reshape2")
+
+library(ggplot2)
+library(reshape2)
+
+```
+
 
 Run every step in the code below, and explain what each step does. 
 ```{r, eval=F}
@@ -369,6 +370,19 @@ Red-green colour blindness is caused by a recessive, X-linked gene (<tt>f</tt>).
 
 #### Exercise 12
 Now we will use R to test for Hardy-Weinberg proportion. Run every step in the code below, and explain what each step does.
+
+Make sure to run this first.
+```{r, eval=F}
+set.seed(666)
+
+install.packages("ggplot2")
+install.packages("reshape2")
+
+library(ggplot2)
+library(reshape2)
+
+```
+
 
 First we define variables.
 ```{r, eval=F}

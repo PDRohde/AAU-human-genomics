@@ -29,6 +29,19 @@ library(ggplot2)
 
 This section provides a brief introduction to fundamental <tt>R</tt> operations. Follow each step carefully, and ensure you understand what each command does and why it works as expected.
 
+Make sure to run this first.
+```{r, eval=F}
+set.seed(666)
+
+install.packages("ggplot2")
+install.packages("reshape2")
+
+library(ggplot2)
+library(reshape2)
+
+```
+
+
 #### A calculator
 You can use <tt>R</tt> as a powerful calculator to perform standard arithmetic operations using the following mathematical operators:
 ```{r}

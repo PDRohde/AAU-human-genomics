@@ -27,18 +27,20 @@ The course responsible is Palle Duun Rohde ([Email](mailto:palledr@hst.aau.dk?su
 **Session 1: Introduction to genetic variation and personalised medicine** \
  [&nbsp; Lecture notes](lecture_notes/01-session_slides-github.pdf)  
  [&nbsp; Exercises](exercises/01-exercises.html)  
+ [&nbsp; Answers to Exercises](exercises/01-session_exercise-answers-Moodle.pdf)  
  [&nbsp; Intro to R](exercises/01-r-intro.html)  
 
 **Session 2: Population genomics** \
-   [&nbsp; Lecture notes](lecture_notes/02-session_slides-GitHub.pdf)  
+  [&nbsp; Lecture notes](lecture_notes/02-session_slides-GitHub.pdf)  
   [&nbsp; Exercises](exercises/02-exercises.html)   
+  [&nbsp; Answers to Exercises](exercises/02-session_exercise-answers-Moodle.pdf)  
 
  
  **Session 3: Risk estimation from pedigrees** \
  [&nbsp; Lecture notes](lecture_notes/03-session_slides-GitHub.pdf)  
  [&nbsp; Group work](exercises/JMD006000001.pdf)  
  [&nbsp; Exercises](exercises/03-exercises.html)  
-
+ [&nbsp; Answers to Exercises](exercises/03-session_exercise-answers-Moodle.pdf)  
 
 <!--
  **Session 4: Complex traits and quantitative genetics** \
