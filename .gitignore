@@ -1,3 +1,11 @@
 .DS_Store
 .RData
 .Rhistory
+Glist.RDS
+Glist_sparseLD_1k.RDS
+human.bed
+human.bim
+human.fam
+human.covar
+human.ld
+human.pheno
