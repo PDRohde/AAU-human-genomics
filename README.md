@@ -52,7 +52,7 @@ The course responsible is Palle Duun Rohde ([Email](mailto:palledr@hst.aau.dk?su
   [&nbsp; Exercises C](exercises/04c-exercises.html)    
 
  **Session 5: Estimation of genetic parameters** \
-  [&nbsp; Lecture notes](lecture_notes/)  
+  [&nbsp; Lecture notes](lecture_notes/05-session_slides-github.pdf)  
   [&nbsp; Exercises](exercises/05-exercises.html)  
 
 
