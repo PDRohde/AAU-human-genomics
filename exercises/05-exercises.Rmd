@@ -73,7 +73,7 @@ install.packages("qgg")
 
 ```{r, echo=T}
 library(qgg) # R package used for REML analysis
-#install.packages("corrplot") 
+install.packages("corrplot", repos = "https://cloud.r-project.org") 
 library(corrplot)
 ```
 
